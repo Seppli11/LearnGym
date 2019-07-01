@@ -8,9 +8,8 @@ public class Course {
 	private Teacher mainTeacher;
 	private List<Subject> subjects = new ArrayList<Subject>();
 	private List<Student> students = new ArrayList<Student>();
-	
+
 	public Course(String name, Teacher mainTeacher) {
-		super();
 		this.name = name;
 		this.mainTeacher = mainTeacher;
 	}
@@ -35,11 +34,16 @@ public class Course {
 		return subjects;
 	}
 
-	public List<Student> getStudents() {
-		return students;
+	public Student[] getStudents() {
+		return students.toArray(new Student[students.size()]);
 	}
-	
-	
 
-	
+	public void addStudent(Student student) {
+		if (students.contains(student)) {
+			return;
+		}
+		student.setCourse(this);
+		students.add(student);
+	}
+
 }
