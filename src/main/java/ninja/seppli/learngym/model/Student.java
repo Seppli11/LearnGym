@@ -1,9 +1,27 @@
 package ninja.seppli.learngym.model;
 
-public class Student extends Person {
+import java.util.List;
 
-	public Student(String firstname, String lastname) {
+public class Student extends Person {
+	
+	private List<Grade> grades;
+	private Course course;
+	
+	public Student(String firstname, String lastname, List<Grade> grades, Course course) {
 		super(firstname, lastname);
+		this.grades = grades;
+		this.course = course;
 	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+	
+
+
 
 }
