@@ -6,16 +6,30 @@ import java.util.Set;
 
 import ninja.seppli.learngym.exception.StudentNotFoundException;
 
+/**
+ *
+ * @author jfr
+ *
+ */
 public class Subject implements Averagable {
 	private String subjectName;
 	private Map<Student, Float> grades = new HashMap<>();
 	private Teacher teacher;
 
+	/**
+	 * constructor
+	 *
+	 * @param subjectName
+	 */
 	public Subject(String subjectName, Teacher teacher) {
 		this.subjectName = subjectName;
 		this.teacher = teacher;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public String getSubjectName() {
 		return subjectName;
 	}
