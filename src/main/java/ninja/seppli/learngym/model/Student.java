@@ -2,7 +2,7 @@ package ninja.seppli.learngym.model;
 
 /**
  *
- * @author jfr
+ * @author jfr and sebi
  *
  */
 public class Student extends Person {
@@ -13,11 +13,10 @@ public class Student extends Person {
 	 *
 	 * @param firstname
 	 * @param lastname
-	 * @param course
 	 */
-	public Student(String firstname, String lastname, Course course) {
+	public Student(String firstname, String lastname) {
 		super(firstname, lastname);
-		this.course = course;
+		this.course = null; // is later set by Course#addStudent(Student)
 	}
 
 	/**
