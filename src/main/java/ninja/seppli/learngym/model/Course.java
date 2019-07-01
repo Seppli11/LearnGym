@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
- * @author jfr
+ *
+ * @author jfr and sebi
  *
  */
 public class Course {
@@ -16,18 +16,17 @@ public class Course {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param name
 	 * @param mainTeacher
 	 */
 	public Course(String name, Teacher mainTeacher) {
-		super();
 		this.name = name;
 		this.mainTeacher = mainTeacher;
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public String getName() {
@@ -35,7 +34,7 @@ public class Course {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param name
 	 */
 	public void setName(String name) {
@@ -43,7 +42,7 @@ public class Course {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public Teacher getMainTeacher() {
@@ -51,7 +50,7 @@ public class Course {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param mainTeacher
 	 */
 	public void setMainTeacher(Teacher mainTeacher) {
@@ -59,19 +58,23 @@ public class Course {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public List<Subject> getSubjects() {
 		return subjects;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	public List<Student> getStudents() {
-		return students;
+	public Student[] getStudents() {
+		return students.toArray(new Student[students.size()]);
+	}
+
+	public void addStudent(Student student) {
+		if (students.contains(student)) {
+			return;
+		}
+		student.setCourse(this);
+		students.add(student);
 	}
 
 }

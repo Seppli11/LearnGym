@@ -1,8 +1,8 @@
 package ninja.seppli.learngym.model;
 
 /**
- * 
- * @author jfr
+ *
+ * @author jfr and sebi
  *
  */
 public class Person {
@@ -11,7 +11,7 @@ public class Person {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param firstname
 	 * @param lastname
 	 */
@@ -21,7 +21,7 @@ public class Person {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public String getFirstname() {
@@ -29,15 +29,15 @@ public class Person {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public String getLastname() {
 		return lastname;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param firstname
 	 */
 	public void setFirstname(String firstname) {
@@ -45,12 +45,11 @@ public class Person {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param lastname
 	 */
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
-	
-	
+
 }

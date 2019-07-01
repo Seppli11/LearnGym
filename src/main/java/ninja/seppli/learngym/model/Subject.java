@@ -1,57 +1,61 @@
 package ninja.seppli.learngym.model;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import ninja.seppli.learngym.exception.StudentNotFoundException;
 
 /**
- * 
- * @author jfr
+ *
+ * @author jfr and sebi
  *
  */
-public class Subject {
+public class Subject implements Averagable {
 	private String subjectName;
-	private List<Grade> grades;
-	private List<Teacher> teachers;
+	private Map<Student, Float> grades = new HashMap<>();
+	private Teacher teacher;
 
 	/**
 	 * constructor
-	 * 
+	 *
 	 * @param subjectName
 	 */
-	public Subject(String subjectName) {
-		super();
+	public Subject(String subjectName, Teacher teacher) {
 		this.subjectName = subjectName;
+		this.teacher = teacher;
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public String getSubjectName() {
 		return subjectName;
 	}
 
-	/**
-	 * 
-	 * @param subjectName
-	 */
-	public void setSubjectName(String subjectName) {
-		this.subjectName = subjectName;
+	public Set<Student> getStudents() {
+		return grades.keySet();
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	public List<Grade> getGrades() {
-		return grades;
+	public boolean containsStudent(Student student) {
+		return grades.containsKey(student);
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	public List<Teacher> getTeachers() {
-		return teachers;
+	public void addGrade(Student student, float grade) throws StudentNotFoundException {
+		if (!containsStudent(student)) {
+			throw new StudentNotFoundException("The student \"" + student + "\" wasn't found");
+		}
+		grades.put(student, grade);
+	}
+
+	public Teacher getTeacher() {
+		return teacher;
+	}
+
+	@Override
+	public float getAverage() {
+		return 0;
 	}
 
 }

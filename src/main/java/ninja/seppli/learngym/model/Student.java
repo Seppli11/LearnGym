@@ -1,20 +1,16 @@
 package ninja.seppli.learngym.model;
 
-import java.util.List;
-
 /**
- * 
+ *
  * @author jfr
  *
  */
 public class Student extends Person {
-
-	private List<Grade> grades;
 	private Course course;
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param firstname
 	 * @param lastname
 	 * @param course
@@ -25,7 +21,7 @@ public class Student extends Person {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public Course getCourse() {
@@ -33,10 +29,10 @@ public class Student extends Person {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param course
 	 */
-	public void setCourse(Course course) {
+	protected void setCourse(Course course) {
 		this.course = course;
 	}
 
