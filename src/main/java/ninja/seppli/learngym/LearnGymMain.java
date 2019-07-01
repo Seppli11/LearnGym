@@ -4,8 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * 
- * @author jfr
+ *
+ * @author jfr and sebi
  *
  */
 public class LearnGymMain {
@@ -13,7 +13,7 @@ public class LearnGymMain {
 
 	/**
 	 * Main
-	 * 
+	 *
 	 * @param args
 	 */
 	public static void main(String[] args) {

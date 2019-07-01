@@ -8,7 +8,7 @@ import ninja.seppli.learngym.exception.StudentNotFoundException;
 
 /**
  *
- * @author jfr
+ * @author jfr and sebi
  *
  */
 public class Subject implements Averagable {

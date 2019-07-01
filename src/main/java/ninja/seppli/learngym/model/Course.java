@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  *
- * @author jfr
+ * @author jfr and sebi
  *
  */
 public class Course {
