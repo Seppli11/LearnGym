@@ -51,6 +51,10 @@ public class Subject implements Averagable {
 		grades.put(student, (float) Math.round(grade * 2) / 2);
 	}
 
+	public float getGrade(Student student) {
+		return grades.get(student);
+	}
+
 	public Teacher getTeacher() {
 		return teacher;
 	}
