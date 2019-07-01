@@ -48,7 +48,7 @@ public class Subject implements Averagable {
 	}
 
 	public void addGrade(Student student, float grade) {
-		grades.put(student, grade);
+		grades.put(student, (float) Math.round(grade * 2) / 2);
 	}
 
 	public Teacher getTeacher() {
