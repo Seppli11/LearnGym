@@ -1,18 +1,19 @@
 package ninja.seppli.learngym.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.DoubleStream;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import ninja.seppli.learngym.exception.NoGradeYetException;
 import ninja.seppli.learngym.exception.StudentNotFoundException;
 
@@ -21,23 +22,20 @@ import ninja.seppli.learngym.exception.StudentNotFoundException;
  * @author jfr and sebi
  *
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Course implements Averagable {
-	@XmlTransient
 	private Logger logger = LogManager.getLogger();
-	private String name;
-	@XmlIDREF
-	private Teacher mainTeacher;
-	private List<Subject> subjects = new ArrayList<Subject>();
+	private StringProperty name = new SimpleStringProperty();
+	private ObjectProperty<Teacher> mainTeacher = new SimpleObjectProperty<>();
+	@XmlElement
+	private ObservableList<Subject> subjects = FXCollections.observableArrayList();
 	@XmlIDREF
 	@XmlElement(name = "students")
-	private List<Student> students = new ArrayList<Student>();
+	private ObservableList<Student> students = FXCollections.observableArrayList();
 
 	/**
 	 * Constructor for jaxb
 	 */
 	protected Course() {
-
 	}
 
 	/**
@@ -47,8 +45,8 @@ public class Course implements Averagable {
 	 * @param mainTeacher
 	 */
 	public Course(String name, Teacher mainTeacher) {
-		this.name = name;
-		this.mainTeacher = mainTeacher;
+		setName(name);
+		setMainTeacher(mainTeacher);
 	}
 
 	/**
@@ -56,7 +54,17 @@ public class Course implements Averagable {
 	 *
 	 * @return the name
 	 */
+	@XmlElement
 	public String getName() {
+		return name.get();
+	}
+
+	/**
+	 * Returns the name property
+	 *
+	 * @return the property
+	 */
+	public StringProperty nameProperty() {
 		return name;
 	}
 
@@ -66,7 +74,7 @@ public class Course implements Averagable {
 	 * @param name the name
 	 */
 	public void setName(String name) {
-		this.name = name;
+		this.name.set(name);
 	}
 
 	/**
@@ -75,7 +83,18 @@ public class Course implements Averagable {
 	 *
 	 * @return the main teacher
 	 */
+	@XmlElement
+	@XmlIDREF
 	public Teacher getMainTeacher() {
+		return mainTeacher.get();
+	}
+
+	/**
+	 * Returns the main teacher property
+	 *
+	 * @return the property
+	 */
+	public ObjectProperty<Teacher> mainTeacherProperty() {
 		return mainTeacher;
 	}
 
@@ -85,7 +104,7 @@ public class Course implements Averagable {
 	 * @param mainTeacher the teacher
 	 */
 	public void setMainTeacher(Teacher mainTeacher) {
-		this.mainTeacher = mainTeacher;
+		this.mainTeacher.set(mainTeacher);
 	}
 
 	/**
@@ -94,7 +113,7 @@ public class Course implements Averagable {
 	 *
 	 * @return the subjects
 	 */
-	public List<Subject> getSubjects() {
+	public ObservableList<Subject> getSubjects() {
 		return subjects;
 	}
 
@@ -104,7 +123,7 @@ public class Course implements Averagable {
 	 *
 	 * @return the students
 	 */
-	public List<Student> getStudents() {
+	public ObservableList<Student> getStudents() {
 		return students;
 	}
 
@@ -139,7 +158,7 @@ public class Course implements Averagable {
 					"The student \"" + s.getFullName() + "\" cannot be found on the course \"" + getName() + "\"");
 		}
 		return getSubjects().stream().filter(subject -> subject.containsStudent(s))
-				.mapToDouble(subject -> subject.getGrade(s));
+				.mapToDouble(subject -> subject.getGradeMap().get(s));
 	}
 
 	/**

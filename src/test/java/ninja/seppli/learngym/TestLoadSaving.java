@@ -24,7 +24,7 @@ import ninja.seppli.learngym.saveload.JaxbSaver;
 
 /**
  * Tests loading and saving
- * 
+ *
  * @author sebi
  *
  */
@@ -66,8 +66,8 @@ public class TestLoadSaving {
 
 		TeacherManager teachers = model.getTeacherManager();
 		Course course = model.getCourse();
-		assertEquals(teachers.getAll()[0].getId(), course.getMainTeacher().getId());
-		assertTrue(teachers.getAll()[0] == course.getMainTeacher());
+		assertEquals(teachers.getAll().get(0).getId(), course.getMainTeacher().getId());
+		assertTrue(teachers.getAll().get(0) == course.getMainTeacher());
 	}
 
 	/**

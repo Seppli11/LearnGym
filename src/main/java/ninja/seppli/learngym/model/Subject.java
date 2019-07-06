@@ -1,16 +1,20 @@
 package ninja.seppli.learngym.model;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import ninja.seppli.learngym.exception.NoGradeYetException;
-import ninja.seppli.learngym.exception.StudentNotFoundException;
 import ninja.seppli.learngym.saveload.adapter.SubjectGradeMapAdapter;
 
 /**
@@ -19,13 +23,42 @@ import ninja.seppli.learngym.saveload.adapter.SubjectGradeMapAdapter;
  * @author jfr and sebi
  *
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Subject implements Averagable {
-	private String subjectName;
+	/**
+	 * the subject name
+	 */
+	private StringProperty subjectName = new SimpleStringProperty();
+
+	/**
+	 * the grades
+	 */
+	@XmlElement
 	@XmlJavaTypeAdapter(SubjectGradeMapAdapter.class)
-	private Map<Student, Double> grades = new HashMap<>();
-	@XmlIDREF
-	private Teacher teacher;
+	private ObservableMap<Student, Double> grades = FXCollections.observableMap(new HashMap<>());
+
+	/**
+	 * An unmodifiable map of {@link #grades}
+	 */
+	private ObservableMap<Student, Double> finalGrades = FXCollections.unmodifiableObservableMap(grades);
+
+	/**
+	 * the teacher
+	 */
+	private ObjectProperty<Teacher> teacher = new SimpleObjectProperty<>();
+
+	private StringBinding shorthandBinding = new StringBinding() {
+		{
+			super.bind(subjectNameProperty());
+		}
+
+		@Override
+		protected String computeValue() {
+			if (getSubjectName().length() < 2) {
+				return getSubjectName();
+			}
+			return getSubjectName().substring(0, 2);
+		}
+	};
 
 	/**
 	 * Constructor for jaxb
@@ -40,8 +73,8 @@ public class Subject implements Averagable {
 	 * @param teacher     the teacher of the subject
 	 */
 	public Subject(String subjectName, Teacher teacher) {
-		this.subjectName = subjectName;
-		this.teacher = teacher;
+		setSubjectName(subjectName);
+		setTeacher(teacher);
 	}
 
 	/**
@@ -49,8 +82,27 @@ public class Subject implements Averagable {
 	 *
 	 * @return returns the name of the subject
 	 */
+	@XmlElement
 	public String getSubjectName() {
+		return subjectName.get();
+	}
+
+	/**
+	 * returns the subjectname property
+	 *
+	 * @return the prop
+	 */
+	public StringProperty subjectNameProperty() {
 		return subjectName;
+	}
+
+	/**
+	 * sets the subject name
+	 *
+	 * @param subjectName the name
+	 */
+	public void setSubjectName(String subjectName) {
+		this.subjectName.set(subjectName);
 	}
 
 	/**
@@ -60,10 +112,25 @@ public class Subject implements Averagable {
 	 * @return the shortname
 	 */
 	public String getShortname() {
-		if (subjectName.length() < 2) {
-			return subjectName;
-		}
-		return subjectName.substring(0, 2);
+		return shorthandBinding.get();
+	}
+
+	/**
+	 * returns the shorthand binding
+	 *
+	 * @return the shorthand binding
+	 */
+	public StringBinding shortnameBinding() {
+		return shorthandBinding;
+	}
+
+	/**
+	 * Returns an unmodifiable version of {@link #grades}
+	 *
+	 * @return the grades map
+	 */
+	public ObservableMap<Student, Double> getGradeMap() {
+		return finalGrades;
 	}
 
 	/**
@@ -96,22 +163,6 @@ public class Subject implements Averagable {
 	}
 
 	/**
-	 * Returns the grade of the student or if the student doesn't participate in the
-	 * subject then an {@link StudentNotFoundException} is thrown.
-	 *
-	 * @param student the student
-	 * @return the grade of the given student
-	 * @throws StudentNotFoundException
-	 */
-	public double getGrade(Student student) throws StudentNotFoundException {
-		if (!containsStudent(student)) {
-			throw new StudentNotFoundException("The student \"" + student.getFirstname() + " " + student.getLastname()
-					+ "\" doesnt' participate in the subject \"" + getSubjectName() + "\"");
-		}
-		return grades.get(student);
-	}
-
-	/**
 	 * Returns all grades in this subject
 	 *
 	 * @return the grades
@@ -136,8 +187,28 @@ public class Subject implements Averagable {
 	 *
 	 * @return the teacher
 	 */
+	@XmlElement
+	@XmlIDREF
 	public Teacher getTeacher() {
+		return teacher.get();
+	}
+
+	/**
+	 * Returns the teacher property
+	 *
+	 * @return the prop
+	 */
+	public ObjectProperty<Teacher> teacherProperty() {
 		return teacher;
+	}
+
+	/**
+	 * Sets the teacher
+	 *
+	 * @param teacher the teacher
+	 */
+	public void setTeacher(Teacher teacher) {
+		this.teacher.set(teacher);
 	}
 
 	@Override

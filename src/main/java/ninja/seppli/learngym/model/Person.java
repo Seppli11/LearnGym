@@ -1,9 +1,13 @@
 package ninja.seppli.learngym.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlID;
 
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import ninja.seppli.learngym.saveload.JaxbLoader;
 
 /**
@@ -11,14 +15,40 @@ import ninja.seppli.learngym.saveload.JaxbLoader;
  * @author jfr and sebi
  *
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Person {
-	@XmlID
-	private String id;
-	private String firstname;
-	private String lastname;
+	/**
+	 * the id property
+	 */
+	private ReadOnlyStringWrapper id = new ReadOnlyStringWrapper();
+	/**
+	 * the firstname property
+	 */
+	private StringProperty firstname = new SimpleStringProperty();
+	/**
+	 * the lastname property
+	 */
+	private StringProperty lastname = new SimpleStringProperty();
 
+	/**
+	 * the fullname binding which automaticly updates if the firstname or lastname
+	 * changes
+	 */
+	private StringBinding fullnameBinding = new StringBinding() {
+		{
+			super.bind(firstnameProperty(), lastnameProperty());
+		}
+
+		@Override
+		protected String computeValue() {
+			return getFirstname() + " " + getLastname();
+		}
+	};
+
+	/**
+	 * jaxb constructor
+	 */
 	protected Person() {
+
 	}
 
 	/**
@@ -29,9 +59,9 @@ public class Person {
 	 * @param lastname  the lastname
 	 */
 	protected Person(String id, String firstname, String lastname) {
-		this.id = id;
-		this.firstname = firstname;
-		this.lastname = lastname;
+		this.id.set(id);
+		setFirstname(firstname);
+		setLastname(lastname);
 	}
 
 	/**
@@ -39,40 +69,70 @@ public class Person {
 	 *
 	 * @return the id of this person
 	 */
+	@XmlElement
+	@XmlID
 	public String getId() {
-		return id;
+		return id.get();
 	}
 
 	/**
+	 * Returns the read only id property
 	 *
-	 * @return
+	 * @return the property
 	 */
+	public ReadOnlyStringProperty idProperty() {
+		return id.getReadOnlyProperty();
+	}
+
+	/**
+	 * Returns the first name
+	 *
+	 * @return the first name
+	 */
+	@XmlElement
 	public String getFirstname() {
+		return firstname.get();
+	}
+
+	/**
+	 * Returns the firstname property
+	 *
+	 * @return the prop
+	 */
+	public StringProperty firstnameProperty() {
 		return firstname;
 	}
 
 	/**
+	 * Sets the first name of the person
 	 *
-	 * @return
+	 * @param firstname the firstname
 	 */
+	public void setFirstname(String firstname) {
+		this.firstname.set(firstname);
+	}
+
+	/**
+	 * Returns the last name
+	 *
+	 * @return the last name
+	 */
+	@XmlElement
 	public String getLastname() {
+		return lastname.get();
+	}
+
+	public StringProperty lastnameProperty() {
 		return lastname;
 	}
 
 	/**
+	 * Sets the last name of the person
 	 *
-	 * @param firstname
-	 */
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	/**
-	 *
-	 * @param lastname
+	 * @param lastname the lastname
 	 */
 	public void setLastname(String lastname) {
-		this.lastname = lastname;
+		this.lastname.set(lastname);
 	}
 
 	/**
@@ -80,8 +140,8 @@ public class Person {
 	 *
 	 * @return the full name
 	 */
-	public String getFullName() {
-		return getFirstname() + " " + getLastname();
+	public StringBinding getFullName() {
+		return fullnameBinding;
 	}
 
 	@Override

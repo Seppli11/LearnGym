@@ -121,7 +121,7 @@ public class PrintStreamPrinter implements Printer {
 			Subject subject = subjects[i];
 			if (subject.containsStudent(student)) {
 				formatStr.append("\t%.1f");
-				formatArgs[2 + i] = subject.getGrade(student);
+				formatArgs[2 + i] = subject.getGradeMap().get(student);
 			} else {
 				formatStr.append("\t%s");
 				formatArgs[2 + i] = "-";
