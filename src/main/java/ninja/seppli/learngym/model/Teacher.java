@@ -9,15 +9,21 @@ import ninja.seppli.learngym.exception.IllegalNameException;
  *
  */
 public class Teacher extends Person {
+	/**
+	 * Constructor for JAXB
+	 */
+	protected Teacher() {
+	}
 
 	/**
 	 * Constructor
 	 *
-	 * @param firstname
-	 * @param lastname
+	 * @param id        the id
+	 * @param firstname the firstname
+	 * @param lastname  the lastname
 	 */
-	public Teacher(String firstname, String lastname) {
-		super(firstname, lastname);
+	protected Teacher(String id, String firstname, String lastname) {
+		super(id, firstname, lastname);
 	}
 
 	/**

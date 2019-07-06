@@ -1,23 +1,46 @@
 package ninja.seppli.learngym.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlID;
+
+import ninja.seppli.learngym.saveload.JaxbLoader;
+
 /**
  *
  * @author jfr and sebi
  *
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Person {
+	@XmlID
+	private String id;
 	private String firstname;
 	private String lastname;
+
+	protected Person() {
+	}
 
 	/**
 	 * Constructor
 	 *
-	 * @param firstname
-	 * @param lastname
+	 * @param id        the id
+	 * @param firstname the firstname
+	 * @param lastname  the lastname
 	 */
-	public Person(String firstname, String lastname) {
+	protected Person(String id, String firstname, String lastname) {
+		this.id = id;
 		this.firstname = firstname;
 		this.lastname = lastname;
+	}
+
+	/**
+	 * Used in {@link JaxbLoader} to identify persons uniquly
+	 *
+	 * @return the id of this person
+	 */
+	public String getId() {
+		return id;
 	}
 
 	/**

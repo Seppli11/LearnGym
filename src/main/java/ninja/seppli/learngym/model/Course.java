@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlIDREF;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,13 +21,24 @@ import ninja.seppli.learngym.exception.StudentNotFoundException;
  * @author jfr and sebi
  *
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Course implements Averagable {
-
+	@XmlTransient
 	private Logger logger = LogManager.getLogger();
 	private String name;
+	@XmlIDREF
 	private Teacher mainTeacher;
 	private List<Subject> subjects = new ArrayList<Subject>();
+	@XmlIDREF
+	@XmlElement(name = "students")
 	private List<Student> students = new ArrayList<Student>();
+
+	/**
+	 * Constructor for jaxb
+	 */
+	protected Course() {
+
+	}
 
 	/**
 	 * Constructor
