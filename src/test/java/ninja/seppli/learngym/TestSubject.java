@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ninja.seppli.learngym.exception.NoGradeYetException;
 import ninja.seppli.learngym.model.Course;
 import ninja.seppli.learngym.model.Student;
 import ninja.seppli.learngym.model.Subject;
@@ -12,14 +13,15 @@ import ninja.seppli.learngym.model.Teacher;
 
 /**
  * Tests the subject class
- * 
+ *
  * @author sebi
  *
  */
 public class TestSubject {
 	private Course course;
 	private Subject math;
-	private Student student;
+	private Student student1;
+	private Student student2;
 
 	/**
 	 * sets up the environement
@@ -31,46 +33,57 @@ public class TestSubject {
 
 		math = new Subject("Math", teacher);
 
-		student = new Student("Kim", "Müller");
-		course.addStudent(student);
+		student1 = new Student("Kim", "Müller");
+		course.getStudents().add(student1);
+
+		student2 = new Student("Jan", "Haus");
+		course.getStudents().add(student2);
 	}
 
 	/**
 	 * tests rounding of grades
+	 *
+	 * @throws NoGradeYetException
 	 */
 	@Test
-	public void testRounding1() {
-		math.addGrade(student, 5);
-		math.addGrade(student, 5.5f);
-		assertEquals(5f, math.getAverage());
-	}
-
-	/**
-	 * tests rounding of grades
-	 */
-	@Test
-	public void testRounding2() {
-		math.addGrade(student, 5);
-		math.addGrade(student, 6);
+	public void testRounding1() throws NoGradeYetException {
+		math.setGrade(student1, 5);
+		math.setGrade(student2, 5.5f);
 		assertEquals(5.5f, math.getAverage());
 	}
 
 	/**
 	 * tests rounding of grades
+	 *
+	 * @throws NoGradeYetException
 	 */
 	@Test
-	public void testRounding3() {
-		math.addGrade(student, 5.5f);
-		math.addGrade(student, 6);
+	public void testRounding2() throws NoGradeYetException {
+		math.setGrade(student1, 5);
+		math.setGrade(student2, 6);
+		assertEquals(5.5f, math.getAverage());
+	}
+
+	/**
+	 * tests rounding of grades
+	 *
+	 * @throws NoGradeYetException
+	 */
+	@Test
+	public void testRounding3() throws NoGradeYetException {
+		math.setGrade(student1, 5.5f);
+		math.setGrade(student2, 6);
 		assertEquals(6f, math.getAverage());
 	}
 
 	/**
 	 * tests adding grades
+	 *
+	 * @throws NoGradeYetException
 	 */
 	@Test
-	public void testAddGrade() {
-		math.addGrade(student, 5.2f);
+	public void testAddGrade() throws NoGradeYetException {
+		math.setGrade(student1, 5.2f);
 		assertEquals(5f, math.getAverage());
 	}
 }
