@@ -5,11 +5,11 @@ import java.util.function.IntFunction;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
-import ninja.seppli.learngym.saveload.JaxbSaverLoader;
+import ninja.seppli.learngym.saveload.JaxbLoader;
 
 /**
  * A class which manages all student. This is mainly used for the
- * {@link JaxbSaverLoader}
+ * {@link JaxbLoader}
  *
  * @author sebi
  *

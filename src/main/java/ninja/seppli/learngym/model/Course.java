@@ -26,11 +26,19 @@ public class Course implements Averagable {
 	@XmlTransient
 	private Logger logger = LogManager.getLogger();
 	private String name;
+	@XmlIDREF
 	private Teacher mainTeacher;
 	private List<Subject> subjects = new ArrayList<Subject>();
 	@XmlIDREF
 	@XmlElement(name = "students")
 	private List<Student> students = new ArrayList<Student>();
+
+	/**
+	 * Constructor for jaxb
+	 */
+	protected Course() {
+
+	}
 
 	/**
 	 * Constructor

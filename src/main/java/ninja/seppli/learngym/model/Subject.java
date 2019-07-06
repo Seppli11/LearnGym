@@ -6,9 +6,12 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlIDREF;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import ninja.seppli.learngym.exception.NoGradeYetException;
 import ninja.seppli.learngym.exception.StudentNotFoundException;
+import ninja.seppli.learngym.saveload.adapter.SubjectGradeMapAdapter;
 
 /**
  * a class which represents a subject
@@ -19,8 +22,16 @@ import ninja.seppli.learngym.exception.StudentNotFoundException;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Subject implements Averagable {
 	private String subjectName;
+	@XmlJavaTypeAdapter(SubjectGradeMapAdapter.class)
 	private Map<Student, Double> grades = new HashMap<>();
+	@XmlIDREF
 	private Teacher teacher;
+
+	/**
+	 * Constructor for jaxb
+	 */
+	protected Subject() {
+	}
 
 	/**
 	 * constructor

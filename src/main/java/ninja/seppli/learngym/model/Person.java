@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
 
-import ninja.seppli.learngym.saveload.JaxbSaverLoader;
+import ninja.seppli.learngym.saveload.JaxbLoader;
 
 /**
  *
@@ -29,12 +29,13 @@ public class Person {
 	 * @param lastname  the lastname
 	 */
 	protected Person(String id, String firstname, String lastname) {
+		this.id = id;
 		this.firstname = firstname;
 		this.lastname = lastname;
 	}
 
 	/**
-	 * Used in {@link JaxbSaverLoader} to identify persons uniquly
+	 * Used in {@link JaxbLoader} to identify persons uniquly
 	 *
 	 * @return the id of this person
 	 */

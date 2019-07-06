@@ -2,60 +2,96 @@
 <learngym>
     <course>
         <name>5LG18a</name>
-        <mainTeacher>
-            <firstname>Irene</firstname>
-            <lastname>Heller</lastname>
-        </mainTeacher>
+        <mainTeacher>ID#-9223372036854775808</mainTeacher>
         <subjects>
             <subjectName>Deutsch</subjectName>
             <grades>
-                <entry>
-                    <key>
-                        <firstname>Nicola</firstname>
-                        <lastname>Berscher</lastname>
-                    </key>
+                <item>
+                    <key>ID#-9223372036854775807</key>
                     <value>5.5</value>
-                </entry>
-                <entry>
-                    <key>
-                        <firstname>Eric</firstname>
-                        <lastname>Lindenbaum</lastname>
-                    </key>
+                </item>
+                <item>
+                    <key>ID#-9223372036854775805</key>
                     <value>4.0</value>
-                </entry>
-                <entry>
-                    <key>
-                        <firstname>Simona</firstname>
-                        <lastname>Aschwand</lastname>
-                    </key>
+                </item>
+                <item>
+                    <key>ID#-9223372036854775808</key>
                     <value>4.0</value>
-                </entry>
-                <entry>
-                    <key>
-                        <firstname>Jasmine</firstname>
-                        <lastname>Kern</lastname>
-                    </key>
+                </item>
+                <item>
+                    <key>ID#-9223372036854775806</key>
                     <value>5.0</value>
-                </entry>
+                </item>
             </grades>
-            <teacher>
-                <firstname>Irene</firstname>
-                <lastname>Heller</lastname>
-            </teacher>
+            <teacher>ID#-9223372036854775808</teacher>
         </subjects>
         <subjects>
             <subjectName>Französisch</subjectName>
             <grades>
-                <entry>
-                    <key>
-                        <firstname>Nicola</firstname>
-                        <lastname>Berscher</lastname>
-                    </key>
+                <item>
+                    <key>ID#-9223372036854775807</key>
                     <value>6.0</value>
-                </entry>
-                <entry>
-                    <key>
-                        <firstname>Eric</firstname>
-                        <lastname>Lindenbaum</lastname>
-                    </key>
-                    <value>2.0</
+                </item>
+                <item>
+                    <key>ID#-9223372036854775805</key>
+                    <value>2.0</value>
+                </item>
+                <item>
+                    <key>ID#-9223372036854775808</key>
+                    <value>4.0</value>
+                </item>
+                <item>
+                    <key>ID#-9223372036854775806</key>
+                    <value>5.0</value>
+                </item>
+            </grades>
+            <teacher>ID#-9223372036854775808</teacher>
+        </subjects>
+        <subjects>
+            <subjectName>Englisch</subjectName>
+            <grades/>
+            <teacher>ID#-9223372036854775808</teacher>
+        </subjects>
+        <students>ID#-9223372036854775808</students>
+        <students>ID#-9223372036854775807</students>
+        <students>ID#-9223372036854775806</students>
+        <students>ID#-9223372036854775805</students>
+        <students>ID#-9223372036854775804</students>
+    </course>
+    <studentManager>
+        <nextId>-9223372036854775803</nextId>
+        <objects xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="student">
+            <id>ID#-9223372036854775808</id>
+            <firstname>Simona</firstname>
+            <lastname>Aschwand</lastname>
+        </objects>
+        <objects xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="student">
+            <id>ID#-9223372036854775807</id>
+            <firstname>Nicola</firstname>
+            <lastname>Berscher</lastname>
+        </objects>
+        <objects xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="student">
+            <id>ID#-9223372036854775806</id>
+            <firstname>Jasmine</firstname>
+            <lastname>Kern</lastname>
+        </objects>
+        <objects xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="student">
+            <id>ID#-9223372036854775805</id>
+            <firstname>Eric</firstname>
+            <lastname>Lindenbaum</lastname>
+        </objects>
+        <objects xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="student">
+            <id>ID#-9223372036854775804</id>
+            <firstname>Tim</firstname>
+            <lastname>Lindenbaum</lastname>
+        </objects>
+    </studentManager>
+    <teacherManager>
+        <nextId>-9223372036854775807</nextId>
+        <objects xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="teacher">
+            <id>ID#-9223372036854775808</id>
+            <firstname>Irene</firstname>
+            <lastname>Heller</lastname>
+        </objects>
+    </teacherManager>
+</learngym>
