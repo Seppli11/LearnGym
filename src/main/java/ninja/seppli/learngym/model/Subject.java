@@ -108,7 +108,7 @@ public class Subject implements Averagable {
 	/**
 	 * Returns if there is at least one grade. If this function returns false, then
 	 * {@link #getAverage()} will throw a {@link NoGradeYetException}.
-	 * 
+	 *
 	 * @return if there is at least one grade.
 	 */
 	public boolean hasGrades() {

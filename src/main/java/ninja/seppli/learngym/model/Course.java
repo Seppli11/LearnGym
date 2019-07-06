@@ -16,6 +16,7 @@ import ninja.seppli.learngym.exception.StudentNotFoundException;
  *
  */
 public class Course implements Averagable {
+
 	private Logger logger = LogManager.getLogger();
 	private String name;
 	private Teacher mainTeacher;
@@ -102,6 +103,11 @@ public class Course implements Averagable {
 		return Math.round(avg * 2) / 2f;
 	}
 
+	@Override
+	public boolean hasGrades() {
+		return subjects.stream().filter(Subject::hasGrades).count() != 0;
+	}
+
 	/**
 	 * Returns a stream of the grades of the students
 	 *
@@ -147,6 +153,44 @@ public class Course implements Averagable {
 	}
 
 	/**
+	 * Checks whether a student has grades. This can be used to check if
+	 * {@link #getAverageOfStudent(Student)} will throw a
+	 * {@link NoGradeYetException}
+	 *
+	 * @param s the student
+	 * @return if the student has a grade
+	 */
+	public boolean hasStudentGrades(Student s) {
+		return getGrades(s).length != 0;
+	}
+
+	/**
+	 * Returns an {@link Averagable} object for a student. This method will throw a
+	 * {@link NoGradeYetException}
+	 *
+	 * @param s the student
+	 * @return the object
+	 */
+	public Averagable getAveragableOfStudent(Student s) {
+		if (!getStudents().contains(s)) {
+			throw new StudentNotFoundException(
+					"The student \"" + s.getFullName() + "\" cannot be found on the course \"" + getName() + "\"");
+		}
+		return new Averagable() {
+
+			@Override
+			public boolean hasGrades() {
+				return hasStudentGrades(s);
+			}
+
+			@Override
+			public double getAverage() throws NoGradeYetException {
+				return getAverageOfStudent(s);
+			}
+		};
+	}
+
+	/**
 	 * Returns a sum of the student's positive grades
 	 *
 	 * @param s the student
@@ -155,7 +199,17 @@ public class Course implements Averagable {
 	 *                                  course
 	 */
 	public double getPositiveGrade(Student s) {
-		return streamOfGrades(s).filter(grade -> grade >= 4).sum();
+		return streamOfGrades(s).filter(grade -> grade >= 4).map(grade -> grade - 4).sum();
+	}
+
+	/**
+	 * Returns how many grades are above 4
+	 *
+	 * @param s the student
+	 * @return how many grades are ok
+	 */
+	public int getPostiveGradeCounter(Student s) {
+		return (int) streamOfGrades(s).filter(grade -> grade >= 4).count();
 	}
 
 	/**
@@ -167,7 +221,17 @@ public class Course implements Averagable {
 	 *                                  course
 	 */
 	public double getNegativeGrade(Student s) {
-		return streamOfGrades(s).filter(grade -> grade < 4).sum();
+		return streamOfGrades(s).filter(grade -> grade < 4).map(grade -> 4 - grade).sum();
+	}
+
+	/**
+	 * Returns how many grades are below 4
+	 *
+	 * @param s the student
+	 * @return how many grades are not ok
+	 */
+	public int getNegativeGradeCounter(Student s) {
+		return (int) streamOfGrades(s).filter(grade -> grade < 4).count();
 	}
 
 	/**
