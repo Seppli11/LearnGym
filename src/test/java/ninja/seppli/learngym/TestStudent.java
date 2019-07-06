@@ -1,10 +1,14 @@
 package ninja.seppli.learngym;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ninja.seppli.learngym.exception.NoGradeYetException;
 import ninja.seppli.learngym.model.Course;
 import ninja.seppli.learngym.model.Student;
 import ninja.seppli.learngym.model.Subject;
@@ -19,6 +23,7 @@ import ninja.seppli.learngym.model.Teacher;
 public class TestStudent {
 	private Course course;
 	private Subject math;
+	private Subject french;
 	private Student student;
 
 	/**
@@ -27,51 +32,75 @@ public class TestStudent {
 	@BeforeEach
 	public void setup() {
 		Teacher teacher = new Teacher("Franz", "Meier");
-		course = new Course("Math", teacher);
+		course = new Course("7abj", teacher);
 
 		math = new Subject("Math", teacher);
+		course.getSubjects().add(math);
+
+		french = new Subject("French", teacher);
+		course.getSubjects().add(french);
 
 		student = new Student("Kim", "Müller");
-		course.addStudent(student);
+		course.getStudents().add(student);
+	}
+
+	/**
+	 * Tests if the stream works
+	 */
+	@Test
+	public void testStreamOfGrades() {
+		math.setGrade(student, 4);
+		french.setGrade(student, 3);
+		double[] grades = course.streamOfGrades(student).sorted().toArray();
+		assertArrayEquals(new double[] { 3, 4 }, grades);
+
 	}
 
 	/**
 	 * tests rounding of grades
+	 *
+	 * @throws NoGradeYetException
 	 */
 	@Test
-	public void testRounding1() {
-		math.addGrade(student, 5);
-		math.addGrade(student, 5.5f);
-		assertEquals(5f, student.getAverage());
+	public void testRounding1() throws NoGradeYetException {
+		math.setGrade(student, 5);
+		french.setGrade(student, 5.5f);
+		assertEquals(5.5f, course.getAverageOfStudent(student));
 	}
 
 	/**
 	 * tests rounding of grades
+	 *
+	 * @throws NoGradeYetException
 	 */
 	@Test
-	public void testRounding2() {
-		math.addGrade(student, 5);
-		math.addGrade(student, 6);
-		assertEquals(5.5f, student.getAverage());
+	public void testRounding2() throws NoGradeYetException {
+		math.setGrade(student, 5);
+		french.setGrade(student, 6);
+		assertEquals(5.5f, course.getAverageOfStudent(student));
 	}
 
 	/**
 	 * tests rounding of grades
+	 *
+	 * @throws NoGradeYetException
 	 */
 	@Test
-	public void testRounding3() {
-		math.addGrade(student, 5.5f);
-		math.addGrade(student, 6);
-		assertEquals(6f, student.getAverage());
+	public void testRounding3() throws NoGradeYetException {
+		math.setGrade(student, 5.5f);
+		french.setGrade(student, 6);
+		assertEquals(6d, course.getAverageOfStudent(student));
 	}
 
 	/**
 	 * tests adding grades
+	 *
+	 * @throws NoGradeYetException
 	 */
 	@Test
-	public void testAddGrade() {
-		math.addGrade(student, 5.2f);
-		assertEquals(5f, student.getAverage());
+	public void testAddGrade() throws NoGradeYetException {
+		math.setGrade(student, 5.2f);
+		assertEquals(5f, course.getAverageOfStudent(student));
 	}
 
 	/**
@@ -79,10 +108,10 @@ public class TestStudent {
 	 */
 	@Test
 	public void testPromDecision1() {
-		math.addGrade(student, 3);
-		math.addGrade(student, 5);
-		math.addGrade(student, 5);
-		assertFalse(student.isProv());
+		math.setGrade(student, 3);
+		french.setGrade(student, 5);
+		math.setGrade(student, 5);
+		assertFalse(course.isStudentProv(student));
 	}
 
 	/**
@@ -90,9 +119,9 @@ public class TestStudent {
 	 */
 	@Test
 	public void testPromDecision2() {
-		math.addGrade(student, 3);
-		math.addGrade(student, 5);
-		assertTrue(student.isProv());
+		math.setGrade(student, 3);
+		french.setGrade(student, 5);
+		assertTrue(course.isStudentProv(student));
 	}
 
 	/**
@@ -100,7 +129,7 @@ public class TestStudent {
 	 */
 	@Test
 	public void testPromDecision3() {
-		math.addGrade(student, 5);
-		assertTrue(student.isProv());
+		math.setGrade(student, 5);
+		assertFalse(course.isStudentProv(student));
 	}
 }
