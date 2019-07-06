@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 import ninja.seppli.learngym.exception.NoGradeYetException;
 import ninja.seppli.learngym.exception.StudentNotFoundException;
 
@@ -13,6 +16,7 @@ import ninja.seppli.learngym.exception.StudentNotFoundException;
  * @author jfr and sebi
  *
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Subject implements Averagable {
 	private String subjectName;
 	private Map<Student, Double> grades = new HashMap<>();
@@ -111,6 +115,7 @@ public class Subject implements Averagable {
 	 *
 	 * @return if there is at least one grade.
 	 */
+	@Override
 	public boolean hasGrades() {
 		return getGrades().length != 0;
 	}

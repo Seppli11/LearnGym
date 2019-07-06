@@ -11,8 +11,10 @@ import org.junit.jupiter.api.Test;
 import ninja.seppli.learngym.exception.NoGradeYetException;
 import ninja.seppli.learngym.model.Course;
 import ninja.seppli.learngym.model.Student;
+import ninja.seppli.learngym.model.StudentManager;
 import ninja.seppli.learngym.model.Subject;
 import ninja.seppli.learngym.model.Teacher;
+import ninja.seppli.learngym.model.TeacherManager;
 
 /**
  * Tests the student class
@@ -31,7 +33,7 @@ public class TestStudent {
 	 */
 	@BeforeEach
 	public void setup() {
-		Teacher teacher = new Teacher("Franz", "Meier");
+		Teacher teacher = new TeacherManager().add("Franz", "Meier");
 		course = new Course("7abj", teacher);
 
 		math = new Subject("Math", teacher);
@@ -40,7 +42,7 @@ public class TestStudent {
 		french = new Subject("French", teacher);
 		course.getSubjects().add(french);
 
-		student = new Student("Kim", "Müller");
+		student = new StudentManager().add("Kim", "Müller");
 		course.getStudents().add(student);
 	}
 
