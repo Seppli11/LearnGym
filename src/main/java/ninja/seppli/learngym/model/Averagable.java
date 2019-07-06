@@ -1,8 +1,8 @@
 package ninja.seppli.learngym.model;
 
 /**
- * 
- * @author jfr
+ *
+ * @author jfr and sebi
  *
  */
 public interface Averagable {

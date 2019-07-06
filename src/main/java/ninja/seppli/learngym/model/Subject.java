@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import ninja.seppli.learngym.exception.StudentNotFoundException;
-
 /**
  *
  * @author jfr and sebi
@@ -34,6 +32,13 @@ public class Subject implements Averagable {
 		return subjectName;
 	}
 
+	public String getShortname() {
+		if (subjectName.length() < 2) {
+			return subjectName;
+		}
+		return subjectName.substring(0, 2);
+	}
+
 	public Set<Student> getStudents() {
 		return grades.keySet();
 	}
@@ -42,11 +47,8 @@ public class Subject implements Averagable {
 		return grades.containsKey(student);
 	}
 
-	public void addGrade(Student student, float grade) throws StudentNotFoundException {
-		if (!containsStudent(student)) {
-			throw new StudentNotFoundException("The student \"" + student + "\" wasn't found");
-		}
-		grades.put(student, grade);
+	public void addGrade(Student student, float grade) {
+		grades.put(student, (float) Math.round(grade * 2) / 2);
 	}
 
 	public Teacher getTeacher() {

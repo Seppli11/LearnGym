@@ -7,7 +7,7 @@ import javax.lang.model.element.VariableElement;
 
 /**
  *
- * @author jfr
+ * @author jfr and sebi
  *
  */
 public class Student extends Person implements Averagable {
@@ -18,11 +18,10 @@ public class Student extends Person implements Averagable {
 	 *
 	 * @param firstname
 	 * @param lastname
-	 * @param course
 	 */
-	public Student(String firstname, String lastname, Course course) {
+	public Student(String firstname, String lastname) {
 		super(firstname, lastname);
-		this.course = course;
+		this.course = null; // is later set by Course#addStudent(Student)
 	}
 
 	/**
