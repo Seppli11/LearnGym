@@ -1,5 +1,7 @@
 package ninja.seppli.learngym;
 
+import java.util.Arrays;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,26 +38,26 @@ public class LearnGymMain {
 		Student s2 = new Student("Nicola", "Berscher");
 		Student s3 = new Student("Jasmine", "Kern");
 		Student s4 = new Student("Eric", "Lindenbaum");
+		Student s5 = new Student("Tim", "Lindenbaum");
 
-		course.addStudent(s1);
-		course.addStudent(s2);
-		course.addStudent(s3);
-		course.addStudent(s4);
+		course.getStudents().addAll(Arrays.asList(s1, s2, s3, s4, s5));
 
 		Subject german = new Subject("Deutsch", teacher);
 		Subject french = new Subject("Französisch", teacher);
+		Subject english = new Subject("Englisch", teacher);
 		course.getSubjects().add(german);
 		course.getSubjects().add(french);
+		course.getSubjects().add(english);
 
-		german.addGrade(s1, 4);
-		german.addGrade(s2, 5.5f);
-		german.addGrade(s3, 5.0f);
-		german.addGrade(s4, 4f);
+		german.setGrade(s1, 4);
+		german.setGrade(s2, 5.5f);
+		german.setGrade(s3, 5.0f);
+		german.setGrade(s4, 4f);
 
-		french.addGrade(s1, 4);
-		french.addGrade(s2, 6);
-		french.addGrade(s3, 5);
-		french.addGrade(s4, 2);
+		french.setGrade(s1, 4);
+		french.setGrade(s2, 6);
+		french.setGrade(s3, 5);
+		french.setGrade(s4, 2);
 		return course;
 
 	}
