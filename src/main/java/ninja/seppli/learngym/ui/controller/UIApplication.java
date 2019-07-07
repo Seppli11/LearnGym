@@ -8,6 +8,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * The gui application start point
+ * 
+ * @author sebi
+ *
+ */
 public class UIApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -22,6 +28,11 @@ public class UIApplication extends Application {
 		}
 	}
 
+	/**
+	 * Launches the gui
+	 * 
+	 * @param args the command line args
+	 */
 	public static void openGui(String[] args) {
 		launch(args);
 	}

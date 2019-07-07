@@ -76,6 +76,16 @@ public class Person {
 	}
 
 	/**
+	 * Sets the id of the person.<br>
+	 * <b>DON'T CALL THIS FUNCTION!!!<b> It is intendet for jaxb
+	 *
+	 * @param id
+	 */
+	public void setId(String id) {
+		this.id.set(id);
+	}
+
+	/**
 	 * Returns the read only id property
 	 *
 	 * @return the property
@@ -122,6 +132,11 @@ public class Person {
 		return lastname.get();
 	}
 
+	/**
+	 * returns the lastname property
+	 *
+	 * @return the lastname property
+	 */
 	public StringProperty lastnameProperty() {
 		return lastname;
 	}
@@ -140,8 +155,17 @@ public class Person {
 	 *
 	 * @return the full name
 	 */
-	public StringBinding getFullName() {
+	public StringBinding fullnameBinding() {
 		return fullnameBinding;
+	}
+
+	/**
+	 * Returns the full name of the person
+	 * 
+	 * @return the fullname
+	 */
+	public String getFullname() {
+		return fullnameBinding.get();
 	}
 
 	@Override

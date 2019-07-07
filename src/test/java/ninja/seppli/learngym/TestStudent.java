@@ -23,9 +23,21 @@ import ninja.seppli.learngym.model.TeacherManager;
  *
  */
 public class TestStudent {
+	/**
+	 * the course
+	 */
 	private Course course;
+	/**
+	 * the math subject
+	 */
 	private Subject math;
+	/**
+	 * the french subject
+	 */
 	private Subject french;
+	/**
+	 * the student
+	 */
 	private Student student;
 
 	/**

@@ -5,9 +5,6 @@ import java.util.stream.DoubleStream;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlIDREF;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,11 +20,23 @@ import ninja.seppli.learngym.exception.StudentNotFoundException;
  *
  */
 public class Course implements Averagable {
-	private Logger logger = LogManager.getLogger();
+	/**
+	 * the name of the course
+	 */
 	private StringProperty name = new SimpleStringProperty();
+	/**
+	 * the main teacher prop
+	 */
 	private ObjectProperty<Teacher> mainTeacher = new SimpleObjectProperty<>();
+	/**
+	 * the subjects in this course
+	 */
 	@XmlElement
 	private ObservableList<Subject> subjects = FXCollections.observableArrayList();
+
+	/**
+	 * the students in this course
+	 */
 	@XmlIDREF
 	@XmlElement(name = "students")
 	private ObservableList<Student> students = FXCollections.observableArrayList();
@@ -155,10 +164,10 @@ public class Course implements Averagable {
 	public DoubleStream streamOfGrades(Student s) {
 		if (!getStudents().contains(s)) {
 			throw new StudentNotFoundException(
-					"The student \"" + s.getFullName() + "\" cannot be found on the course \"" + getName() + "\"");
+					"The student \"" + s.getFullname() + "\" cannot be found on the course \"" + getName() + "\"");
 		}
 		return getSubjects().stream().filter(subject -> subject.containsStudent(s))
-				.mapToDouble(subject -> subject.getGradeMap().get(s));
+				.mapToDouble(subject -> subject.getStudentGradeEntry(s).getGrade());
 	}
 
 	/**
@@ -210,7 +219,7 @@ public class Course implements Averagable {
 	public Averagable getAveragableOfStudent(Student s) {
 		if (!getStudents().contains(s)) {
 			throw new StudentNotFoundException(
-					"The student \"" + s.getFullName() + "\" cannot be found on the course \"" + getName() + "\"");
+					"The student \"" + s.getFullname() + "\" cannot be found on the course \"" + getName() + "\"");
 		}
 		return new Averagable() {
 

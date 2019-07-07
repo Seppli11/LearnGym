@@ -2,10 +2,8 @@ package ninja.seppli.learngym.view.console;
 
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.Formatter;
 import java.util.List;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import ninja.seppli.learngym.exception.NoGradeYetException;
 import ninja.seppli.learngym.model.Averagable;
@@ -22,10 +20,6 @@ import ninja.seppli.learngym.view.Printer;
  *
  */
 public class PrintStreamPrinter implements Printer {
-	/**
-	 * logger
-	 */
-	private Logger logger = LogManager.getLogger();
 	/**
 	 * the print stream
 	 */
@@ -105,9 +99,9 @@ public class PrintStreamPrinter implements Printer {
 	/**
 	 * prints a line of the table
 	 *
-	 * @param nr        the student number
-	 * @param student   the student of the line
-	 * @param formatStr the format string which should be used
+	 * @param nr      the student number
+	 * @param course  the course
+	 * @param student the student of the line
 	 */
 	private void printTableLine(int nr, Course course, Student student) {
 		StringBuffer formatStr = new StringBuffer("%d\t%s\t");
@@ -121,7 +115,7 @@ public class PrintStreamPrinter implements Printer {
 			Subject subject = subjects[i];
 			if (subject.containsStudent(student)) {
 				formatStr.append("\t%.1f");
-				formatArgs[2 + i] = subject.getGradeMap().get(student);
+				formatArgs[2 + i] = subject.getStudentGradeEntry(student).getGrade();
 			} else {
 				formatStr.append("\t%s");
 				formatArgs[2 + i] = "-";
@@ -167,6 +161,14 @@ public class PrintStreamPrinter implements Printer {
 		out.printf(formatStr, formatArgs);
 	}
 
+	/**
+	 * This method can be used in conjunction with
+	 * {@link Formatter#format(String, Object...)}
+	 *
+	 * @param avg       the object
+	 * @param formatStr the format stringbuffer which is the format string
+	 * @return the object to add to the array
+	 */
 	private Object printAverageable(Averagable avg, StringBuffer formatStr) {
 		if (avg.hasGrades()) {
 			formatStr.append("\t%.1f");

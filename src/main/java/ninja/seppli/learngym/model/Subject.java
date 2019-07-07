@@ -1,23 +1,24 @@
 package ninja.seppli.learngym.model;
 
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import javafx.beans.binding.ListBinding;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import ninja.seppli.learngym.exception.NoGradeYetException;
-import ninja.seppli.learngym.saveload.adapter.SubjectGradeMapAdapter;
+import ninja.seppli.learngym.utils.FxHelper;
 
 /**
  * a class which represents a subject
@@ -35,8 +36,7 @@ public class Subject implements Averagable {
 	 * the grades
 	 */
 	@XmlElement
-	@XmlJavaTypeAdapter(SubjectGradeMapAdapter.class)
-	private ObservableList<SubjectEntry> grades = FXCollections.observableArrayList();
+	private ObservableList<StudentGradeEntry> studentGradeEntries = FXCollections.observableArrayList();
 
 	/**
 	 * the teacher
@@ -46,30 +46,25 @@ public class Subject implements Averagable {
 	/**
 	 * a shorthand binding
 	 */
-	private StringBinding shorthandBinding = new StringBinding() {
-		{
-			super.bind(subjectNameProperty());
+	private StringBinding shorthandBinding = Bindings.createStringBinding(() -> {
+		if (getSubjectName().length() < 2) {
+			return getSubjectName();
 		}
+		return getSubjectName().substring(0, 2);
+	}, subjectNameProperty());
 
-		@Override
-		protected String computeValue() {
-			if (getSubjectName().length() < 2) {
-				return getSubjectName();
-			}
-			return getSubjectName().substring(0, 2);
-		}
-	};
+	/**
+	 * A list of all grades
+	 */
+	private ObservableList<Double> grades = FxHelper.mapList(StudentGradeEntry::getGrade, studentGradeEntries);
 
-	private ListBinding<Double> gradesBinding = new ListBinding<Double>() {
-		{
-			super.bind(grades);
-		}
-
-		@Override
-		protected ObservableList<Double> computeValue() {
-			return FXCollections.observableList((List<Double>) grades.values());
-		}
-	};
+	/**
+	 * An binding for the average
+	 */
+	private DoubleBinding averageBinding = Bindings.createDoubleBinding(() -> {
+		double avg = getGrades().stream().mapToDouble(Double::doubleValue).average().orElse(-1);
+		return Math.round(avg * 2) / 2d;
+	}, studentGradeEntries);
 
 	/**
 	 * Constructor for jaxb
@@ -136,21 +131,12 @@ public class Subject implements Averagable {
 	}
 
 	/**
-	 * Returns an unmodifiable version of {@link #grades}
-	 *
-	 * @return the grades map
-	 */
-	public ObservableMap<Student, Double> getGradeMap() {
-		return finalGrades;
-	}
-
-	/**
 	 * Returns the students which participate in this subject
 	 *
 	 * @return the students
 	 */
-	public Set<Student> getStudents() {
-		return grades.stream().map(SubjectEntry::getStudent).
+	public List<Student> getStudents() {
+		return studentGradeEntries.stream().map(StudentGradeEntry::getStudent).collect(Collectors.toList());
 	}
 
 	/**
@@ -160,7 +146,7 @@ public class Subject implements Averagable {
 	 * @return if the student is in this subjecet
 	 */
 	public boolean containsStudent(Student student) {
-		return grades.containsKey(student);
+		return getStudents().contains(student);
 	}
 
 	/**
@@ -170,7 +156,21 @@ public class Subject implements Averagable {
 	 * @param grade   the grade. The grade is rounded to 0.5 steps
 	 */
 	public void setGrade(Student student, double grade) {
-		grades.put(student, Math.round(grade * 2) / 2d);
+		if (containsStudent(student)) {
+			getStudentGradeEntry(student).setGrade(grade);
+		} else {
+			studentGradeEntries.add(new StudentGradeEntry(student, grade));
+		}
+	}
+
+	/**
+	 * Returns the student grade entry of the student
+	 *
+	 * @param student the student
+	 * @return the grade entry or null if the student doesn't have a grade yet
+	 */
+	public StudentGradeEntry getStudentGradeEntry(Student student) {
+		return studentGradeEntries.stream().filter(se -> student.equals(se.getStudent())).findFirst().orElse(null);
 	}
 
 	/**
@@ -178,17 +178,8 @@ public class Subject implements Averagable {
 	 *
 	 * @return the grades
 	 */
-	public double[] getGrades() {
-		return grades.values().stream().mapToDouble(Double::doubleValue).toArray();
-	}
-
-	/**
-	 * Returns a binding to {@link #getGrades()}
-	 *
-	 * @return the binding
-	 */
-	public ListBinding<Double> gradesBinding() {
-		return gradesBinding;
+	public ObservableList<Double> getGrades() {
+		return grades;
 	}
 
 	/**
@@ -199,7 +190,7 @@ public class Subject implements Averagable {
 	 */
 	@Override
 	public boolean hasGrades() {
-		return getGrades().length != 0;
+		return !getGrades().isEmpty();
 	}
 
 	/**
@@ -233,19 +224,41 @@ public class Subject implements Averagable {
 
 	@Override
 	public double getAverage() throws NoGradeYetException {
-		double avg = grades.values().stream().mapToDouble(Double::doubleValue).average()
-				.orElseThrow(NoGradeYetException::new);
-		return Math.round(avg * 2) / 2f;
+		if (!hasGrades()) {
+			throw new NoGradeYetException("No grades yet");
+		}
+		return averageBinding.get();
 	}
 
-	private static class SubjectEntry {
-		public Student student;
-		public double grade;
+	/**
+	 * Returns a binding for the average of this subject
+	 *
+	 * @return the binding
+	 */
+	public DoubleBinding averageBinding() {
+		return averageBinding;
+	}
+
+	/**
+	 * The student grade entry.
+	 *
+	 * @author sebi
+	 *
+	 */
+	public static class StudentGradeEntry {
+		/**
+		 * the student of this entry
+		 */
+		private Student student;
+		/**
+		 * the grade property
+		 */
+		private DoubleProperty grade = new SimpleDoubleProperty();
 
 		/**
 		 * Jaxb constructor
 		 */
-		public SubjectEntry() {
+		protected StudentGradeEntry() {
 		}
 
 		/**
@@ -254,26 +267,59 @@ public class Subject implements Averagable {
 		 * @param student the student
 		 * @param grade   the grade
 		 */
-		public SubjectEntry(Student student, double grade) {
+		public StudentGradeEntry(Student student, double grade) {
 			this.student = student;
-			this.grade = grade;
+			setGrade(grade);
 		}
 
+		/**
+		 * Returns the student
+		 *
+		 * @return the student
+		 */
+		@XmlElement
+		@XmlIDREF
 		public Student getStudent() {
 			return student;
 		}
 
-		public void setStudent(Student student) {
+		/**
+		 * Sets the student.<br>
+		 * This function is only intendet for jaxb!!!
+		 *
+		 * @param student the new student
+		 */
+		protected void setStudent(Student student) {
 			this.student = student;
 		}
 
+		/**
+		 * Returns the grade of the student
+		 *
+		 * @return the grade
+		 */
+		@XmlElement
 		public double getGrade() {
+			return grade.get();
+		}
+
+		/**
+		 * returns the grade property
+		 *
+		 * @return the prop
+		 */
+		public DoubleProperty gradeProperty() {
 			return grade;
 		}
 
+		/**
+		 * Sets the grade and rounds it to 0.5 steps
+		 *
+		 * @param grade the new grade
+		 */
 		public void setGrade(double grade) {
-			this.grade = grade;
+			this.grade.set(Math.round(grade * 2) / 2d);
 		}
-
 	}
+
 }

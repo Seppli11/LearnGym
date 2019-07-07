@@ -2,51 +2,50 @@
 <learngym>
     <course>
         <subjects>
-            <grades>
-                <item>
-                    <key>ninja.seppli.learngym.model.StudentManager#-9223372036854775808</key>
-                    <value>4.0</value>
-                </item>
-                <item>
-                    <key>ninja.seppli.learngym.model.StudentManager#-9223372036854775807</key>
-                    <value>5.5</value>
-                </item>
-                <item>
-                    <key>ninja.seppli.learngym.model.StudentManager#-9223372036854775805</key>
-                    <value>4.0</value>
-                </item>
-                <item>
-                    <key>ninja.seppli.learngym.model.StudentManager#-9223372036854775806</key>
-                    <value>5.0</value>
-                </item>
-            </grades>
+            <studentGradeEntries>
+                <grade>4.0</grade>
+                <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775808</student>
+            </studentGradeEntries>
+            <studentGradeEntries>
+                <grade>5.5</grade>
+                <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775807</student>
+            </studentGradeEntries>
+            <studentGradeEntries>
+                <grade>5.0</grade>
+                <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775806</student>
+            </studentGradeEntries>
+            <studentGradeEntries>
+                <grade>4.0</grade>
+                <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775805</student>
+            </studentGradeEntries>
             <subjectName>Deutsch</subjectName>
             <teacher>ninja.seppli.learngym.model.TeacherManager#-9223372036854775808</teacher>
         </subjects>
         <subjects>
-            <grades>
-                <item>
-                    <key>ninja.seppli.learngym.model.StudentManager#-9223372036854775808</key>
-                    <value>4.0</value>
-                </item>
-                <item>
-                    <key>ninja.seppli.learngym.model.StudentManager#-9223372036854775807</key>
-                    <value>6.0</value>
-                </item>
-                <item>
-                    <key>ninja.seppli.learngym.model.StudentManager#-9223372036854775805</key>
-                    <value>2.0</value>
-                </item>
-                <item>
-                    <key>ninja.seppli.learngym.model.StudentManager#-9223372036854775806</key>
-                    <value>5.0</value>
-                </item>
-            </grades>
+            <studentGradeEntries>
+                <grade>4.0</grade>
+                <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775808</student>
+            </studentGradeEntries>
+            <studentGradeEntries>
+                <grade>6.0</grade>
+                <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775807</student>
+            </studentGradeEntries>
+            <studentGradeEntries>
+                <grade>5.0</grade>
+                <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775806</student>
+            </studentGradeEntries>
+            <studentGradeEntries>
+                <grade>2.0</grade>
+                <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775805</student>
+            </studentGradeEntries>
+            <studentGradeEntries>
+                <grade>3.0</grade>
+                <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775804</student>
+            </studentGradeEntries>
             <subjectName>Französisch</subjectName>
             <teacher>ninja.seppli.learngym.model.TeacherManager#-9223372036854775808</teacher>
         </subjects>
         <subjects>
-            <grades/>
             <subjectName>Englisch</subjectName>
             <teacher>ninja.seppli.learngym.model.TeacherManager#-9223372036854775808</teacher>
         </subjects>

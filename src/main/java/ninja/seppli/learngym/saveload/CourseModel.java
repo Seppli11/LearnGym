@@ -18,10 +18,23 @@ import ninja.seppli.learngym.model.TeacherManager;
 @XmlRootElement(name = "learngym")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CourseModel {
+	/**
+	 * the course
+	 */
 	private Course course;
+	/**
+	 * the student manager
+	 */
 	private StudentManager studentManager;
+	/**
+	 * the teacher model
+	 */
 	private TeacherManager teacherManager;
 
+	/**
+	 * jaxb constructor
+	 */
+	@SuppressWarnings("unused")
 	private CourseModel() {
 	}
 
@@ -40,7 +53,7 @@ public class CourseModel {
 
 	/**
 	 * Returns the course
-	 * 
+	 *
 	 * @return the course
 	 */
 	public Course getCourse() {
@@ -49,7 +62,7 @@ public class CourseModel {
 
 	/**
 	 * Returns the student manager
-	 * 
+	 *
 	 * @return the student manager
 	 */
 	public StudentManager getStudentManager() {
@@ -58,7 +71,7 @@ public class CourseModel {
 
 	/**
 	 * Returns the teacher manager
-	 * 
+	 *
 	 * @return the teacher manager
 	 */
 	public TeacherManager getTeacherManager() {

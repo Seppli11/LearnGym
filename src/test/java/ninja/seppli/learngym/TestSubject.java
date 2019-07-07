@@ -20,9 +20,21 @@ import ninja.seppli.learngym.model.TeacherManager;
  *
  */
 public class TestSubject {
+	/**
+	 * the course
+	 */
 	private Course course;
+	/**
+	 * the math subject
+	 */
 	private Subject math;
+	/**
+	 * the first student
+	 */
 	private Student student1;
+	/**
+	 * the second student
+	 */
 	private Student student2;
 
 	/**

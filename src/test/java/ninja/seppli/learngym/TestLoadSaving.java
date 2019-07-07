@@ -2,6 +2,7 @@ package ninja.seppli.learngym;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -69,6 +70,11 @@ public class TestLoadSaving {
 		Course course = model.getCourse();
 		assertEquals(teachers.getAll().get(0).getId(), course.getMainTeacher().getId());
 		assertTrue(teachers.getAll().get(0) == course.getMainTeacher());
+
+		Subject german = course.getSubjects().get(0);
+		Student s1 = course.getStudents().get(0);
+		assertNotNull(german.getStudentGradeEntry(s1));
+
 	}
 
 	/**
@@ -86,8 +92,7 @@ public class TestLoadSaving {
 
 		Course course = model.getCourse();
 		Subject german = course.getSubjects().get(0);
-		double[] grades = german.getGrades();
-		Arrays.sort(grades);
+		double[] grades = german.getGrades().stream().sorted().mapToDouble(Double::doubleValue).toArray();
 		assertArrayEquals(new double[] { 4, 5.5d }, grades);
 	}
 
