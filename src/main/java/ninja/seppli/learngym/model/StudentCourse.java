@@ -42,7 +42,8 @@ public class StudentCourse {
 
 		subjects = course.getSubjects().filtered(s -> s.containsStudent(student));
 		finalSubjects = FXCollections.unmodifiableObservableList(subjects);
-		this.course.getSubjects().addListener((ListChangeListener<Subject>) c -> {
+
+		subjects.addListener((ListChangeListener<Subject>) c -> {
 			while (c.next()) {
 				c.getAddedSubList().forEach(subject -> {
 					subject.getGrades().addListener((ListChangeListener<Double>) c1 -> {

@@ -140,6 +140,12 @@ public class MainController implements Initializable {
 		reloadCourseModel(getCourseModel());
 	}
 
+	private void initAvgTable() {
+		avgColumn.setCellValueFactory(param -> {
+			return getCourse().getAveragableOfStudent(param.getValue());
+		});
+	}
+
 	/**
 	 * Reloads the course model
 	 *
@@ -243,6 +249,7 @@ public class MainController implements Initializable {
 			logger.warn("CourseModel is null");
 			return;
 		}
+
 	}
 
 	/**
