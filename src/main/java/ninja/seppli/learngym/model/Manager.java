@@ -72,7 +72,7 @@ public abstract class Manager<T> {
 	 * @return the id
 	 */
 	protected String getNextInt() {
-		return "ID#" + nextId++;
+		return getClass().getName() + "#" + nextId++;
 	}
 
 }

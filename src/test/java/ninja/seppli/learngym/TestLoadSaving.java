@@ -1,5 +1,6 @@
 package ninja.seppli.learngym;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -71,6 +72,26 @@ public class TestLoadSaving {
 	}
 
 	/**
+	 * Test if grades are loaded correctly
+	 *
+	 * @throws JAXBException
+	 */
+	@Test
+	public void testGrades() throws JAXBException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		saver.save(out, model);
+
+		ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+		CourseModel model = loader.load(in);
+
+		Course course = model.getCourse();
+		Subject german = course.getSubjects().get(0);
+		double[] grades = german.getGrades();
+		Arrays.sort(grades);
+		assertArrayEquals(new double[] { 4, 5.5d }, grades);
+	}
+
+	/**
 	 * Creates a course model to test
 	 *
 	 * @return the coursemodel
@@ -88,15 +109,11 @@ public class TestLoadSaving {
 		course.getStudents().addAll(Arrays.asList(s1, s2));
 
 		Subject german = new Subject("Deutsch", teacher);
-		Subject french = new Subject("Französisch", teacher);
 		course.getSubjects().add(german);
-		course.getSubjects().add(french);
 
 		german.setGrade(s1, 4);
 		german.setGrade(s2, 5.5f);
 
-		french.setGrade(s1, 4);
-		french.setGrade(s2, 6);
 		return new CourseModel(course, students, teachers);
 
 	}

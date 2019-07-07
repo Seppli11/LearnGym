@@ -1,6 +1,5 @@
 package ninja.seppli.learngym;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
@@ -14,8 +13,7 @@ import ninja.seppli.learngym.model.Subject;
 import ninja.seppli.learngym.model.Teacher;
 import ninja.seppli.learngym.model.TeacherManager;
 import ninja.seppli.learngym.saveload.CourseModel;
-import ninja.seppli.learngym.saveload.JaxbSaver;
-import ninja.seppli.learngym.view.console.PrintStreamPrinter;
+import ninja.seppli.learngym.ui.controller.UIApplication;
 
 /**
  *
@@ -32,11 +30,13 @@ public class LearnGymMain {
 	 * @throws FileNotFoundException
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
-		PrintStreamPrinter printer = new PrintStreamPrinter(System.out);
-		CourseModel model = createCourseModel();
-		printer.print(model.getCourse());
-		JaxbSaver saver = new JaxbSaver();
-		saver.save(new File("test.xml"), model);
+		UIApplication.openGui(args);
+
+//		PrintStreamPrinter printer = new PrintStreamPrinter(System.out);
+//		CourseModel model = createCourseModel();
+//		printer.print(model.getCourse());
+//		new JaxbSaver().save(new File("test.xml"), model);
+
 	}
 
 	private static CourseModel createCourseModel() {

@@ -1,18 +1,20 @@
 package ninja.seppli.learngym.model;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import javafx.beans.binding.ListBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import ninja.seppli.learngym.exception.NoGradeYetException;
 import ninja.seppli.learngym.saveload.adapter.SubjectGradeMapAdapter;
@@ -34,18 +36,16 @@ public class Subject implements Averagable {
 	 */
 	@XmlElement
 	@XmlJavaTypeAdapter(SubjectGradeMapAdapter.class)
-	private ObservableMap<Student, Double> grades = FXCollections.observableMap(new HashMap<>());
-
-	/**
-	 * An unmodifiable map of {@link #grades}
-	 */
-	private ObservableMap<Student, Double> finalGrades = FXCollections.unmodifiableObservableMap(grades);
+	private ObservableList<SubjectEntry> grades = FXCollections.observableArrayList();
 
 	/**
 	 * the teacher
 	 */
 	private ObjectProperty<Teacher> teacher = new SimpleObjectProperty<>();
 
+	/**
+	 * a shorthand binding
+	 */
 	private StringBinding shorthandBinding = new StringBinding() {
 		{
 			super.bind(subjectNameProperty());
@@ -57,6 +57,17 @@ public class Subject implements Averagable {
 				return getSubjectName();
 			}
 			return getSubjectName().substring(0, 2);
+		}
+	};
+
+	private ListBinding<Double> gradesBinding = new ListBinding<Double>() {
+		{
+			super.bind(grades);
+		}
+
+		@Override
+		protected ObservableList<Double> computeValue() {
+			return FXCollections.observableList((List<Double>) grades.values());
 		}
 	};
 
@@ -139,7 +150,7 @@ public class Subject implements Averagable {
 	 * @return the students
 	 */
 	public Set<Student> getStudents() {
-		return grades.keySet();
+		return grades.stream().map(SubjectEntry::getStudent).
 	}
 
 	/**
@@ -169,6 +180,15 @@ public class Subject implements Averagable {
 	 */
 	public double[] getGrades() {
 		return grades.values().stream().mapToDouble(Double::doubleValue).toArray();
+	}
+
+	/**
+	 * Returns a binding to {@link #getGrades()}
+	 *
+	 * @return the binding
+	 */
+	public ListBinding<Double> gradesBinding() {
+		return gradesBinding;
 	}
 
 	/**
@@ -218,4 +238,42 @@ public class Subject implements Averagable {
 		return Math.round(avg * 2) / 2f;
 	}
 
+	private static class SubjectEntry {
+		public Student student;
+		public double grade;
+
+		/**
+		 * Jaxb constructor
+		 */
+		public SubjectEntry() {
+		}
+
+		/**
+		 * constructor
+		 *
+		 * @param student the student
+		 * @param grade   the grade
+		 */
+		public SubjectEntry(Student student, double grade) {
+			this.student = student;
+			this.grade = grade;
+		}
+
+		public Student getStudent() {
+			return student;
+		}
+
+		public void setStudent(Student student) {
+			this.student = student;
+		}
+
+		public double getGrade() {
+			return grade;
+		}
+
+		public void setGrade(double grade) {
+			this.grade = grade;
+		}
+
+	}
 }
