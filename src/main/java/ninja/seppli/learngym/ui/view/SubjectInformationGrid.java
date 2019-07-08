@@ -7,6 +7,7 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import ninja.seppli.learngym.exception.NoGradeYetException;
 import ninja.seppli.learngym.model.Course;
 import ninja.seppli.learngym.model.Subject;
 
@@ -68,6 +69,13 @@ public class SubjectInformationGrid extends GridPane {
 		Label mainTeacherLbl = new Label("Klasse: " + getCourse().getMainTeacher().getFullname());
 		add(mainTeacherLbl, 0, 4);
 
+		Label courseAvgLbl;
+		try {
+			courseAvgLbl = new Label("Durchschnitt: " + (getCourse().hasGrades() ? getCourse().getAverage() : "-"));
+			add(courseAvgLbl, 0, 5);
+		} catch (NoGradeYetException e) {
+			// shoulden't happend
+		}
 	}
 
 	/**

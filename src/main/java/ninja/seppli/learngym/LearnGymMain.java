@@ -25,6 +25,9 @@ import ninja.seppli.learngym.view.console.PrintStreamPrinter;
  *
  */
 public class LearnGymMain {
+	/**
+	 * logger
+	 */
 	private static Logger logger = LogManager.getLogger(LearnGymMain.class);
 
 	/**
@@ -50,6 +53,11 @@ public class LearnGymMain {
 		}
 	}
 
+	/**
+	 * Creates a mock course model
+	 *
+	 * @return the created mock
+	 */
 	private static CourseModel createCourseModel() {
 		TeacherManager teachers = new TeacherManager();
 		StudentManager students = new StudentManager();
