@@ -33,6 +33,11 @@ public class StudentCourse implements Averagable {
 	private Student student;
 
 	/**
+	 * the course
+	 */
+	private Course course;
+
+	/**
 	 * the grades
 	 */
 	private ObservableList<Double> grades = FXCollections.observableArrayList();
@@ -117,11 +122,13 @@ public class StudentCourse implements Averagable {
 	 * Constructor<br>
 	 * Used by {@link Course}
 	 *
+	 * @param course  the course of this object
 	 * @param student the student
 	 */
-	protected StudentCourse(Student student) {
+	protected StudentCourse(Course course, Student student) {
+		this.course = course;
 		this.student = student;
-		// setupCourse is called by Course
+		setCourse(course);
 	}
 
 	/**
@@ -239,6 +246,17 @@ public class StudentCourse implements Averagable {
 	 */
 	public void setStudent(Student student) {
 		this.student = student;
+	}
+
+	@XmlElement
+	@XmlIDREF
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+		setupCourse(course);
 	}
 
 	/**

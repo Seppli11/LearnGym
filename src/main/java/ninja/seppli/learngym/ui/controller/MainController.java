@@ -166,7 +166,9 @@ public class MainController implements Initializable {
 
 		// setup grade grid
 		TableColumn<Student, String> studentNameColumn = new TableColumn<>("Students");
-		studentNameColumn.setCellValueFactory(cellData -> cellData.getValue().fullnameBinding());
+		studentNameColumn.setCellValueFactory(cellData -> {
+			return cellData.getValue().fullnameBinding();
+		});
 		mainGrid.getColumns().add(studentNameColumn);
 
 		Course course = model.getCourse();

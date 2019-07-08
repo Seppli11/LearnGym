@@ -1,6 +1,7 @@
 package ninja.seppli.learngym.model;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
 
 import javafx.beans.property.ObjectProperty;
@@ -8,7 +9,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import ninja.seppli.learngym.exception.NoGradeYetException;
 
@@ -18,6 +18,10 @@ import ninja.seppli.learngym.exception.NoGradeYetException;
  *
  */
 public class Course implements Averagable {
+	/**
+	 * the id for jaxb
+	 */
+	private String id = getClass().getName() + "#1";
 	/**
 	 * the name of the course
 	 */
@@ -42,12 +46,12 @@ public class Course implements Averagable {
 	 * Constructor for jaxb
 	 */
 	protected Course() {
-		students.addListener((ListChangeListener<StudentCourse>) c -> {
-			while (c.next()) {
-				c.getAddedSubList().forEach(obj -> obj.setupCourse(this));
-			}
-
-		});
+//		students.addListener((ListChangeListener<StudentCourse>) c -> {
+//			while (c.next()) {
+//				c.getAddedSubList().forEach(obj -> obj.setupCourse(this));
+//			}
+//
+//		});
 	}
 
 	/**
@@ -60,6 +64,17 @@ public class Course implements Averagable {
 		this();
 		setName(name);
 		setMainTeacher(mainTeacher);
+	}
+
+	/**
+	 * the id of the course
+	 *
+	 * @return the course
+	 */
+	@XmlElement
+	@XmlID
+	public String getId() {
+		return id;
 	}
 
 	/**
@@ -147,7 +162,7 @@ public class Course implements Averagable {
 	 * @return the created student course
 	 */
 	public StudentCourse addStudent(Student student) {
-		StudentCourse studentCourse = new StudentCourse(student);
+		StudentCourse studentCourse = new StudentCourse(this, student);
 		students.add(studentCourse);
 		return studentCourse;
 	}
