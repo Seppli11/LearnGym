@@ -58,8 +58,7 @@ public class StudentCourse implements Averagable {
 	 * an binding to the average of the student
 	 */
 	private DoubleBinding averageBinding = Bindings.createDoubleBinding(() -> {
-		double avg = grades.stream().mapToDouble(Double::doubleValue).average().orElse(-1);
-		return Math.round(avg * 2) / 2d;
+		return grades.stream().mapToDouble(Double::doubleValue).average().orElse(-1);
 	}, grades);
 
 	/**
@@ -76,23 +75,23 @@ public class StudentCourse implements Averagable {
 	 * A bindings to how many grades are positive
 	 */
 	private IntegerBinding positiveGradesCounterBinding = Bindings.createIntegerBinding(positiveGradeList::size,
-			positiveGradeList);
+			grades);
 	/**
 	 * A bindings to how many grades are negative
 	 */
 	private IntegerBinding negativeGradesCounterBinding = Bindings.createIntegerBinding(negativeGradeList::size,
-			positiveGradeList);
+			grades);
 
 	/**
 	 * The sum of all positive points
 	 */
-	private DoubleBinding positiveSumBinding = Bindings.createDoubleBinding(
-			() -> positiveGradeList.stream().mapToDouble(grade -> grade - 4).sum(), positiveGradeList);
+	private DoubleBinding positiveSumBinding = Bindings
+			.createDoubleBinding(() -> positiveGradeList.stream().mapToDouble(grade -> grade - 4).sum(), grades);
 	/**
 	 * The sum of all negative points
 	 */
-	private DoubleBinding negativeGradeSumBinding = Bindings.createDoubleBinding(
-			() -> negativeGradeList.stream().mapToDouble(grade -> 4 - grade).sum(), positiveGradeList);
+	private DoubleBinding negativeGradeSumBinding = Bindings
+			.createDoubleBinding(() -> negativeGradeList.stream().mapToDouble(grade -> 4 - grade).sum(), grades);
 
 	/**
 	 * the listener to replace and track grades
@@ -119,6 +118,13 @@ public class StudentCourse implements Averagable {
 	}
 
 	/**
+	 * Fixes the bindings
+	 */
+	protected void fix() {
+		setupCourse(course);
+	}
+
+	/**
 	 * Constructor<br>
 	 * Used by {@link Course}
 	 *
@@ -132,7 +138,7 @@ public class StudentCourse implements Averagable {
 	}
 
 	/**
-	 * Setsup the object
+	 * Sets up the object
 	 *
 	 * @param course the course to use
 	 */
@@ -165,6 +171,7 @@ public class StudentCourse implements Averagable {
 		});
 
 		setupSubjectListener(course);
+
 	}
 
 	/**
@@ -186,7 +193,7 @@ public class StudentCourse implements Averagable {
 							.collect(Collectors.toList()));
 
 					// setup listener which catch if a student register/unregister itself
-					subjects.forEach(this::addListenersToSubject);
+					c1.getAddedSubList().forEach(this::addListenersToSubject);
 				}
 
 				// a subject is removed
@@ -248,15 +255,25 @@ public class StudentCourse implements Averagable {
 		this.student = student;
 	}
 
+	/**
+	 * Returns the course
+	 *
+	 * @return the course
+	 */
 	@XmlElement
 	@XmlIDREF
 	public Course getCourse() {
 		return course;
 	}
 
-	public void setCourse(Course course) {
+	/**
+	 * Setter for the course<br>
+	 * Jaxb function
+	 *
+	 * @param course the course
+	 */
+	protected void setCourse(Course course) {
 		this.course = course;
-		setupCourse(course);
 	}
 
 	/**

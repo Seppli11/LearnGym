@@ -67,6 +67,13 @@ public class Course implements Averagable {
 	}
 
 	/**
+	 * Fixes the model after jaxb created it
+	 */
+	public void fix() {
+		getStudents().forEach(StudentCourse::fix);
+	}
+
+	/**
 	 * the id of the course
 	 *
 	 * @return the course
@@ -176,7 +183,7 @@ public class Course implements Averagable {
 				throw new RuntimeException("This shoulden't have happend", e);
 			}
 		}).average().orElseThrow(NoGradeYetException::new);
-		return Math.round(avg * 2) / 2f;
+		return avg;
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -36,6 +37,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 import ninja.seppli.learngym.model.Course;
 import ninja.seppli.learngym.model.Student;
@@ -91,7 +93,7 @@ public class MainController implements Initializable {
 	 * The negative column
 	 */
 	@FXML
-	private TableColumn<StudentCourse, Double> negativeCounterColumn;
+	private TableColumn<StudentCourse, Integer> negativeCounterColumn;
 
 	/*
 	 * The prom column
@@ -139,13 +141,32 @@ public class MainController implements Initializable {
 
 		subjectInformationGrid = new SubjectInformationGrid();
 		subjectInfoPane.setCenter(subjectInformationGrid);
+		initAvgTable();
 		reloadCourseModel(getCourseModel());
 	}
 
+	/**
+	 * Inits the avg table
+	 */
 	private void initAvgTable() {
-//		avgColumn.setCellValueFactory(param -> {
-//			return getCourse().getAveragableOfStudent(param.getValue());
-//		});
+		avgColumn.setCellValueFactory(cellData -> {
+			return cellData.getValue().averageBinding().asObject();
+		});
+
+		sumNegativeColumn.setCellValueFactory(cellData -> {
+			return cellData.getValue().negativeSumBinding().asObject();
+		});
+
+		negativeCounterColumn.setCellValueFactory(cellData -> {
+			return cellData.getValue().negativeGradesCounterBinding().asObject();
+		});
+
+		promColumn.setCellValueFactory(cellData -> {
+			StudentCourse studentCourse = cellData.getValue();
+			return Bindings.createStringBinding(() -> {
+				return studentCourse.isProv() ? "N_PROM" : "DEF_PR";
+			}, studentCourse.provBinding());
+		});
 	}
 
 	/**
@@ -157,6 +178,7 @@ public class MainController implements Initializable {
 		mainGrid.getColumns().clear();
 		subjectInformationGrid.setCourse(getCourse());
 		toolbar.setDisable(model == null);
+		setupAvgTable(model);
 		if (model == null) {
 			logger.warn("CourseModel is null");
 			return;
@@ -169,6 +191,7 @@ public class MainController implements Initializable {
 		studentNameColumn.setCellValueFactory(cellData -> {
 			return cellData.getValue().fullnameBinding();
 		});
+		studentNameColumn.setSortable(false);
 		mainGrid.getColumns().add(studentNameColumn);
 
 		Course course = model.getCourse();
@@ -231,6 +254,7 @@ public class MainController implements Initializable {
 			}
 			return subject.getStudentGradeEntry(student).gradeProperty();
 		});
+		subjectColumn.setSortable(false);
 		subjectColumn.setOnEditCommit(e -> {
 			Number num = e.getOldValue();
 			if (e.getNewValue() != null) {
@@ -239,6 +263,7 @@ public class MainController implements Initializable {
 			Student student = e.getRowValue();
 			if (num == null) {
 			} else {
+				subject.setGrade(student, num.doubleValue());
 				subject.setGrade(student, num.doubleValue());
 			}
 			mainGrid.refresh();
@@ -249,6 +274,11 @@ public class MainController implements Initializable {
 		mainGrid.getColumns().add(subjectColumn);
 	}
 
+	/**
+	 * Sets up the avg table to the new model
+	 *
+	 * @param model the model
+	 */
 	private void setupAvgTable(CourseModel model) {
 		avgTable.getItems().clear();
 		if (model == null) {
@@ -434,6 +464,37 @@ public class MainController implements Initializable {
 	@FXML
 	private void openStudentManager(ActionEvent e) {
 		StudentManagerDialogController.show(getCourseModel().getStudentManager());
+	}
+
+	/**
+	 * Adds an student
+	 *
+	 * @param e the event
+	 */
+	@FXML
+	private void addStudent(ActionEvent e) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setHeaderText("Schüler hinzufügen");
+		ComboBox<Student> student = new ComboBox<>();
+		student.setConverter(new StringConverter<Student>() {
+
+			@Override
+			public String toString(Student object) {
+				return object.getFullname();
+			}
+
+			@Override
+			public Student fromString(String string) {
+				return null;
+			}
+		});
+		student.setItems(getCourseModel().getStudentManager().getAll());
+		alert.setGraphic(student);
+		alert.showAndWait();
+		Student selectedStudent = student.getValue();
+		if (selectedStudent != null) {
+			getCourse().addStudent(selectedStudent);
+		}
 	}
 
 	/**
