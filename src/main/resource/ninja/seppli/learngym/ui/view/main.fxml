@@ -72,10 +72,10 @@
    <right>
       <TableView fx:id="avgTable" prefHeight="531.0" prefWidth="258.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="avgColumn" prefWidth="75.0" text="Durchscnitt" />
-            <TableColumn fx:id="sumNegativeColumn" prefWidth="75.0" text="Sum. T" />
-            <TableColumn fx:id="negativeCounterColumn" prefWidth="75.0" text="Anz. T." />
-            <TableColumn fx:id="promColumn" prefWidth="75.0" text="Prom" />
+          <TableColumn fx:id="avgColumn" prefWidth="75.0" sortable="false" text="Durchscnitt" />
+            <TableColumn fx:id="sumNegativeColumn" prefWidth="75.0" sortable="false" text="Sum. T" />
+            <TableColumn fx:id="negativeCounterColumn" prefWidth="75.0" sortable="false" text="Anz. T." />
+            <TableColumn fx:id="promColumn" prefWidth="75.0" sortable="false" text="Prom" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

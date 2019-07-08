@@ -67,6 +67,13 @@ public class Course implements Averagable {
 	}
 
 	/**
+	 * Fixes the model after jaxb created it
+	 */
+	public void fix() {
+		getStudents().forEach(StudentCourse::fix);
+	}
+
+	/**
 	 * the id of the course
 	 *
 	 * @return the course

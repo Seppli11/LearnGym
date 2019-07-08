@@ -115,7 +115,7 @@ public class TestStudent {
 	/**
 	 * tests adding grades
 	 *
-	 * @throws NoGradeYetException
+	 * @throws NoGradeYetExcep tion
 	 */
 	@Test
 	public void testAddGrade() throws NoGradeYetException {

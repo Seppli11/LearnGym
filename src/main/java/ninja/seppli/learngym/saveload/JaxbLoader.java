@@ -27,7 +27,9 @@ public class JaxbLoader {
 	public CourseModel load(InputStream in) throws JAXBException {
 		JAXBContext ctx = JAXBContext.newInstance(CourseModel.class);
 		Unmarshaller mar = ctx.createUnmarshaller();
-		return (CourseModel) mar.unmarshal(in);
+		CourseModel model = (CourseModel) mar.unmarshal(in);
+		model.getCourse().fix();
+		return model;
 	}
 
 	/**

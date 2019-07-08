@@ -1,6 +1,9 @@
 package ninja.seppli.learngym;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+
+import javax.xml.bind.JAXBException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +15,9 @@ import ninja.seppli.learngym.model.Subject;
 import ninja.seppli.learngym.model.Teacher;
 import ninja.seppli.learngym.model.TeacherManager;
 import ninja.seppli.learngym.saveload.CourseModel;
+import ninja.seppli.learngym.saveload.JaxbLoader;
 import ninja.seppli.learngym.ui.controller.UIApplication;
+import ninja.seppli.learngym.view.console.PrintStreamPrinter;
 
 /**
  *
@@ -25,17 +30,24 @@ public class LearnGymMain {
 	/**
 	 * Main
 	 *
-	 * @param args
-	 * @throws FileNotFoundException
+	 * @param args the sytem args
 	 */
-	public static void main(String[] args) throws FileNotFoundException {
-		UIApplication.openGui(args);
-
-//		PrintStreamPrinter printer = new PrintStreamPrinter(System.out);
-//		CourseModel model = createCourseModel();
-//		printer.print(model.getCourse());
-//		new JaxbSaver().save(new File("test.xml"), model);
-
+	public static void main(String[] args) {
+		if (args.length > 0) {
+			if (args.length != 1) {
+				logger.error("Usage: learngym <filepath>");
+			}
+			File file = new File(args[0]);
+			try {
+				CourseModel model = new JaxbLoader().load(file);
+				PrintStreamPrinter printer = new PrintStreamPrinter(System.out);
+				printer.print(model.getCourse());
+			} catch (FileNotFoundException | JAXBException e) {
+				logger.error("Cannot load file \"{}\"", file.getAbsoluteFile());
+			}
+		} else {
+			UIApplication.openGui(args);
+		}
 	}
 
 	private static CourseModel createCourseModel() {
