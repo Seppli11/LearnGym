@@ -66,6 +66,7 @@
           <Button mnemonicParsing="false" onAction="#openSubjectManager" text="Fach Manager" />
             <Button mnemonicParsing="false" onAction="#openTeacherManager" text="Lehrer Manager" />
             <Button mnemonicParsing="false" onAction="#openStudentManager" text="Schüler Manager" />
+            <Button mnemonicParsing="false" onAction="#addStudent" text="Schüler Hinzufügen" />
         </items>
       </ToolBar>
    </bottom>

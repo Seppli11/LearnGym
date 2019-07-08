@@ -183,7 +183,7 @@ public class Course implements Averagable {
 				throw new RuntimeException("This shoulden't have happend", e);
 			}
 		}).average().orElseThrow(NoGradeYetException::new);
-		return Math.round(avg * 2) / 2f;
+		return avg;
 	}
 
 	@Override

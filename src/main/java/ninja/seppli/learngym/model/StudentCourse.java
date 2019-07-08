@@ -58,8 +58,7 @@ public class StudentCourse implements Averagable {
 	 * an binding to the average of the student
 	 */
 	private DoubleBinding averageBinding = Bindings.createDoubleBinding(() -> {
-		double avg = grades.stream().mapToDouble(Double::doubleValue).average().orElse(-1);
-		return Math.round(avg * 2) / 2d;
+		return grades.stream().mapToDouble(Double::doubleValue).average().orElse(-1);
 	}, grades);
 
 	/**

@@ -62,6 +62,12 @@ public class SubjectInformationGrid extends GridPane {
 			}
 		});
 
+		Label classLbl = new Label("Klasse: " + getCourse().getName());
+		add(classLbl, 0, 3);
+
+		Label mainTeacherLbl = new Label("Klasse: " + getCourse().getMainTeacher().getFullname());
+		add(mainTeacherLbl, 0, 4);
+
 	}
 
 	/**

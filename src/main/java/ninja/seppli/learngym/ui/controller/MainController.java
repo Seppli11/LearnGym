@@ -26,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -36,6 +37,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 import ninja.seppli.learngym.model.Course;
 import ninja.seppli.learngym.model.Student;
@@ -462,6 +464,37 @@ public class MainController implements Initializable {
 	@FXML
 	private void openStudentManager(ActionEvent e) {
 		StudentManagerDialogController.show(getCourseModel().getStudentManager());
+	}
+
+	/**
+	 * Adds an student
+	 *
+	 * @param e the event
+	 */
+	@FXML
+	private void addStudent(ActionEvent e) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setHeaderText("Schüler hinzufügen");
+		ComboBox<Student> student = new ComboBox<>();
+		student.setConverter(new StringConverter<Student>() {
+
+			@Override
+			public String toString(Student object) {
+				return object.getFullname();
+			}
+
+			@Override
+			public Student fromString(String string) {
+				return null;
+			}
+		});
+		student.setItems(getCourseModel().getStudentManager().getAll());
+		alert.setGraphic(student);
+		alert.showAndWait();
+		Student selectedStudent = student.getValue();
+		if (selectedStudent != null) {
+			getCourse().addStudent(selectedStudent);
+		}
 	}
 
 	/**
