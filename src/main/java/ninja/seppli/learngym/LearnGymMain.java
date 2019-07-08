@@ -1,8 +1,6 @@
 package ninja.seppli.learngym;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,8 +12,7 @@ import ninja.seppli.learngym.model.Subject;
 import ninja.seppli.learngym.model.Teacher;
 import ninja.seppli.learngym.model.TeacherManager;
 import ninja.seppli.learngym.saveload.CourseModel;
-import ninja.seppli.learngym.saveload.JaxbSaver;
-import ninja.seppli.learngym.view.console.PrintStreamPrinter;
+import ninja.seppli.learngym.ui.controller.UIApplication;
 
 /**
  *
@@ -32,11 +29,13 @@ public class LearnGymMain {
 	 * @throws FileNotFoundException
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
-		PrintStreamPrinter printer = new PrintStreamPrinter(System.out);
-		CourseModel model = createCourseModel();
-		printer.print(model.getCourse());
-		JaxbSaver saver = new JaxbSaver();
-		saver.save(new File("test.xml"), model);
+		UIApplication.openGui(args);
+
+//		PrintStreamPrinter printer = new PrintStreamPrinter(System.out);
+//		CourseModel model = createCourseModel();
+//		printer.print(model.getCourse());
+//		new JaxbSaver().save(new File("test.xml"), model);
+
 	}
 
 	private static CourseModel createCourseModel() {
@@ -52,7 +51,11 @@ public class LearnGymMain {
 		Student s4 = students.add("Eric", "Lindenbaum");
 		Student s5 = students.add("Tim", "Lindenbaum");
 
-		course.getStudents().addAll(Arrays.asList(s1, s2, s3, s4, s5));
+		course.addStudent(s1);
+		course.addStudent(s2);
+		course.addStudent(s3);
+		course.addStudent(s4);
+		course.addStudent(s5);
 
 		Subject german = new Subject("Deutsch", teacher);
 		Subject french = new Subject("Französisch", teacher);

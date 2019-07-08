@@ -1,12 +1,11 @@
 package ninja.seppli.learngym.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.IntFunction;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import ninja.seppli.learngym.saveload.JaxbLoader;
 
 /**
@@ -14,18 +13,25 @@ import ninja.seppli.learngym.saveload.JaxbLoader;
  * {@link JaxbLoader}
  *
  * @author sebi
+ * @param <T> the type of the manager
  *
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class Manager<T> {
 	/**
 	 * the next id
 	 */
+	@XmlElement
 	private long nextId = Long.MIN_VALUE;
 	/**
 	 * the list with all objects
 	 */
-	protected List<T> objects = new ArrayList<>();
+	@XmlElement
+	protected ObservableList<T> objects = FXCollections.observableArrayList();
+
+	/**
+	 * An unmodifiable list of objects
+	 */
+	private ObservableList<T> finalObjects = FXCollections.unmodifiableObservableList(objects);
 
 	/**
 	 * Constructor
@@ -48,8 +54,8 @@ public abstract class Manager<T> {
 	 *
 	 * @return the students
 	 */
-	public T[] getAll() {
-		return objects.stream().toArray(getArrayIntFunction());
+	public ObservableList<T> getAll() {
+		return finalObjects;
 	}
 
 	/**
@@ -66,7 +72,7 @@ public abstract class Manager<T> {
 	 * @return the id
 	 */
 	protected String getNextInt() {
-		return "ID#" + nextId++;
+		return getClass().getName() + "#" + nextId++;
 	}
 
 }

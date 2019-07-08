@@ -20,9 +20,21 @@ import ninja.seppli.learngym.model.TeacherManager;
  *
  */
 public class TestSubject {
+	/**
+	 * the course
+	 */
 	private Course course;
+	/**
+	 * the math subject
+	 */
 	private Subject math;
+	/**
+	 * the first student
+	 */
 	private Student student1;
+	/**
+	 * the second student
+	 */
 	private Student student2;
 
 	/**
@@ -37,10 +49,10 @@ public class TestSubject {
 
 		StudentManager students = new StudentManager();
 		student1 = students.add("Kim", "Müller");
-		course.getStudents().add(student1);
+		course.addStudent(student1);
 
 		student2 = students.add("Jan", "Haus");
-		course.getStudents().add(student2);
+		course.addStudent(student2);
 	}
 
 	/**

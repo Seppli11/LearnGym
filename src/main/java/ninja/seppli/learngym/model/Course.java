@@ -1,43 +1,57 @@
 package ninja.seppli.learngym.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.DoubleStream;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlTransient;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import ninja.seppli.learngym.exception.NoGradeYetException;
-import ninja.seppli.learngym.exception.StudentNotFoundException;
 
 /**
  *
  * @author jfr and sebi
  *
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Course implements Averagable {
-	@XmlTransient
-	private Logger logger = LogManager.getLogger();
-	private String name;
-	@XmlIDREF
-	private Teacher mainTeacher;
-	private List<Subject> subjects = new ArrayList<Subject>();
-	@XmlIDREF
-	@XmlElement(name = "students")
-	private List<Student> students = new ArrayList<Student>();
+	/**
+	 * the id for jaxb
+	 */
+	private String id = getClass().getName() + "#1";
+	/**
+	 * the name of the course
+	 */
+	private StringProperty name = new SimpleStringProperty();
+	/**
+	 * the main teacher prop
+	 */
+	private ObjectProperty<Teacher> mainTeacher = new SimpleObjectProperty<>();
+	/**
+	 * the subjects in this course
+	 */
+	@XmlElement
+	private ObservableList<Subject> subjects = FXCollections.observableArrayList();
+
+	/**
+	 * the students in this course
+	 */
+	@XmlElement
+	private ObservableList<StudentCourse> students = FXCollections.observableArrayList();
 
 	/**
 	 * Constructor for jaxb
 	 */
 	protected Course() {
-
+//		students.addListener((ListChangeListener<StudentCourse>) c -> {
+//			while (c.next()) {
+//				c.getAddedSubList().forEach(obj -> obj.setupCourse(this));
+//			}
+//
+//		});
 	}
 
 	/**
@@ -47,8 +61,20 @@ public class Course implements Averagable {
 	 * @param mainTeacher
 	 */
 	public Course(String name, Teacher mainTeacher) {
-		this.name = name;
-		this.mainTeacher = mainTeacher;
+		this();
+		setName(name);
+		setMainTeacher(mainTeacher);
+	}
+
+	/**
+	 * the id of the course
+	 *
+	 * @return the course
+	 */
+	@XmlElement
+	@XmlID
+	public String getId() {
+		return id;
 	}
 
 	/**
@@ -56,7 +82,17 @@ public class Course implements Averagable {
 	 *
 	 * @return the name
 	 */
+	@XmlElement
 	public String getName() {
+		return name.get();
+	}
+
+	/**
+	 * Returns the name property
+	 *
+	 * @return the property
+	 */
+	public StringProperty nameProperty() {
 		return name;
 	}
 
@@ -66,7 +102,7 @@ public class Course implements Averagable {
 	 * @param name the name
 	 */
 	public void setName(String name) {
-		this.name = name;
+		this.name.set(name);
 	}
 
 	/**
@@ -75,7 +111,18 @@ public class Course implements Averagable {
 	 *
 	 * @return the main teacher
 	 */
+	@XmlElement
+	@XmlIDREF
 	public Teacher getMainTeacher() {
+		return mainTeacher.get();
+	}
+
+	/**
+	 * Returns the main teacher property
+	 *
+	 * @return the property
+	 */
+	public ObjectProperty<Teacher> mainTeacherProperty() {
 		return mainTeacher;
 	}
 
@@ -85,7 +132,7 @@ public class Course implements Averagable {
 	 * @param mainTeacher the teacher
 	 */
 	public void setMainTeacher(Teacher mainTeacher) {
-		this.mainTeacher = mainTeacher;
+		this.mainTeacher.set(mainTeacher);
 	}
 
 	/**
@@ -94,7 +141,7 @@ public class Course implements Averagable {
 	 *
 	 * @return the subjects
 	 */
-	public List<Subject> getSubjects() {
+	public ObservableList<Subject> getSubjects() {
 		return subjects;
 	}
 
@@ -104,8 +151,20 @@ public class Course implements Averagable {
 	 *
 	 * @return the students
 	 */
-	public List<Student> getStudents() {
+	public ObservableList<StudentCourse> getStudents() {
 		return students;
+	}
+
+	/**
+	 * Adds a new student
+	 *
+	 * @param student the student
+	 * @return the created student course
+	 */
+	public StudentCourse addStudent(Student student) {
+		StudentCourse studentCourse = new StudentCourse(this, student);
+		students.add(studentCourse);
+		return studentCourse;
 	}
 
 	@Override
@@ -125,143 +184,4 @@ public class Course implements Averagable {
 		return subjects.stream().filter(Subject::hasGrades).count() != 0;
 	}
 
-	/**
-	 * Returns a stream of the grades of the students
-	 *
-	 * @param s the student
-	 * @return the stream of grades
-	 * @throws StudentNotFoundException if the student isn't partipating in this
-	 *                                  course
-	 */
-	public DoubleStream streamOfGrades(Student s) {
-		if (!getStudents().contains(s)) {
-			throw new StudentNotFoundException(
-					"The student \"" + s.getFullName() + "\" cannot be found on the course \"" + getName() + "\"");
-		}
-		return getSubjects().stream().filter(subject -> subject.containsStudent(s))
-				.mapToDouble(subject -> subject.getGrade(s));
-	}
-
-	/**
-	 * Returns all grades of a student
-	 *
-	 * @param s the student
-	 * @return the grades in an array
-	 * @throws StudentNotFoundException if the student isn't partipating in this
-	 *                                  course
-	 */
-	public double[] getGrades(Student s) {
-		return streamOfGrades(s).toArray();
-	}
-
-	/**
-	 * Gets the average of a student.<br>
-	 * This method is here and not in the student class, because if there are
-	 * multiple courses, this method has to be on the course and not on the student,
-	 * because the course has the reference to the student and not reversed.
-	 *
-	 * @param s the student
-	 * @return the average
-	 * @throws NoGradeYetException
-	 */
-	public double getAverageOfStudent(Student s) throws NoGradeYetException {
-		double avg = streamOfGrades(s).average().orElseThrow(NoGradeYetException::new);
-		return Math.round(avg * 2) / 2d;
-	}
-
-	/**
-	 * Checks whether a student has grades. This can be used to check if
-	 * {@link #getAverageOfStudent(Student)} will throw a
-	 * {@link NoGradeYetException}
-	 *
-	 * @param s the student
-	 * @return if the student has a grade
-	 */
-	public boolean hasStudentGrades(Student s) {
-		return getGrades(s).length != 0;
-	}
-
-	/**
-	 * Returns an {@link Averagable} object for a student. This method will throw a
-	 * {@link NoGradeYetException}
-	 *
-	 * @param s the student
-	 * @return the object
-	 */
-	public Averagable getAveragableOfStudent(Student s) {
-		if (!getStudents().contains(s)) {
-			throw new StudentNotFoundException(
-					"The student \"" + s.getFullName() + "\" cannot be found on the course \"" + getName() + "\"");
-		}
-		return new Averagable() {
-
-			@Override
-			public boolean hasGrades() {
-				return hasStudentGrades(s);
-			}
-
-			@Override
-			public double getAverage() throws NoGradeYetException {
-				return getAverageOfStudent(s);
-			}
-		};
-	}
-
-	/**
-	 * Returns a sum of the student's positive grades
-	 *
-	 * @param s the student
-	 * @return the sum of all the student's positive grades
-	 * @throws StudentNotFoundException if the student isn't participating in this
-	 *                                  course
-	 */
-	public double getPositiveGrade(Student s) {
-		return streamOfGrades(s).filter(grade -> grade >= 4).map(grade -> grade - 4).sum();
-	}
-
-	/**
-	 * Returns how many grades are above 4
-	 *
-	 * @param s the student
-	 * @return how many grades are ok
-	 */
-	public int getPostiveGradeCounter(Student s) {
-		return (int) streamOfGrades(s).filter(grade -> grade >= 4).count();
-	}
-
-	/**
-	 * Returns a sum of the student's negative grades
-	 *
-	 * @param s the student
-	 * @return the sum of all the student's negative grades
-	 * @throws StudentNotFoundException if the student isn't participating in this
-	 *                                  course
-	 */
-	public double getNegativeGrade(Student s) {
-		return streamOfGrades(s).filter(grade -> grade < 4).map(grade -> 4 - grade).sum();
-	}
-
-	/**
-	 * Returns how many grades are below 4
-	 *
-	 * @param s the student
-	 * @return how many grades are not ok
-	 */
-	public int getNegativeGradeCounter(Student s) {
-		return (int) streamOfGrades(s).filter(grade -> grade < 4).count();
-	}
-
-	/**
-	 * Checks if the student is prov or not
-	 *
-	 * @param s the student
-	 * @return if the student is prov or not
-	 * @throws StudentNotFoundException if the student isn't participating in this
-	 *                                  course
-	 */
-	public boolean isStudentProv(Student s) {
-		double positive = getPositiveGrade(s);
-		double negative = getNegativeGrade(s);
-		return positive < negative * 2;
-	}
 }

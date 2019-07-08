@@ -19,6 +19,9 @@ import org.apache.logging.log4j.Logger;
  *
  */
 public class JaxbSaver {
+	/**
+	 * logger
+	 */
 	private Logger logger = LogManager.getLogger();
 
 	/**

@@ -1,11 +1,12 @@
 package ninja.seppli.learngym;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 
 import javax.xml.bind.JAXBException;
 
@@ -24,7 +25,7 @@ import ninja.seppli.learngym.saveload.JaxbSaver;
 
 /**
  * Tests loading and saving
- * 
+ *
  * @author sebi
  *
  */
@@ -66,8 +67,32 @@ public class TestLoadSaving {
 
 		TeacherManager teachers = model.getTeacherManager();
 		Course course = model.getCourse();
-		assertEquals(teachers.getAll()[0].getId(), course.getMainTeacher().getId());
-		assertTrue(teachers.getAll()[0] == course.getMainTeacher());
+		assertEquals(teachers.getAll().get(0).getId(), course.getMainTeacher().getId());
+		assertTrue(teachers.getAll().get(0) == course.getMainTeacher());
+
+		Subject german = course.getSubjects().get(0);
+		Student s1 = course.getStudents().get(0).getStudent();
+		assertNotNull(german.getStudentGradeEntry(s1));
+
+	}
+
+	/**
+	 * Test if grades are loaded correctly
+	 *
+	 * @throws JAXBException
+	 */
+	@Test
+	public void testGrades() throws JAXBException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		saver.save(out, model);
+
+		ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+		CourseModel model = loader.load(in);
+
+		Course course = model.getCourse();
+		Subject german = course.getSubjects().get(0);
+		double[] grades = german.getGrades().stream().sorted().mapToDouble(Double::doubleValue).toArray();
+		assertArrayEquals(new double[] { 4, 5.5d }, grades);
 	}
 
 	/**
@@ -85,18 +110,15 @@ public class TestLoadSaving {
 		Student s1 = students.add("Simona", "Aschwand");
 		Student s2 = students.add("Nicola", "Berscher");
 
-		course.getStudents().addAll(Arrays.asList(s1, s2));
+		course.addStudent(s1);
+		course.addStudent(s2);
 
 		Subject german = new Subject("Deutsch", teacher);
-		Subject french = new Subject("Französisch", teacher);
 		course.getSubjects().add(german);
-		course.getSubjects().add(french);
 
 		german.setGrade(s1, 4);
 		german.setGrade(s2, 5.5f);
 
-		french.setGrade(s1, 4);
-		french.setGrade(s2, 6);
 		return new CourseModel(course, students, teachers);
 
 	}

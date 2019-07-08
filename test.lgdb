@@ -38,6 +38,10 @@
                 <grade>2.0</grade>
                 <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775805</student>
             </studentGradeEntries>
+            <studentGradeEntries>
+                <grade>3.0</grade>
+                <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775804</student>
+            </studentGradeEntries>
             <subjectName>Französisch</subjectName>
             <teacher>ninja.seppli.learngym.model.TeacherManager#-9223372036854775808</teacher>
         </subjects>
@@ -45,27 +49,11 @@
             <subjectName>Englisch</subjectName>
             <teacher>ninja.seppli.learngym.model.TeacherManager#-9223372036854775808</teacher>
         </subjects>
-        <students>
-            <course>ninja.seppli.learngym.model.Course#1</course>
-            <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775808</student>
-        </students>
-        <students>
-            <course>ninja.seppli.learngym.model.Course#1</course>
-            <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775807</student>
-        </students>
-        <students>
-            <course>ninja.seppli.learngym.model.Course#1</course>
-            <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775806</student>
-        </students>
-        <students>
-            <course>ninja.seppli.learngym.model.Course#1</course>
-            <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775805</student>
-        </students>
-        <students>
-            <course>ninja.seppli.learngym.model.Course#1</course>
-            <student>ninja.seppli.learngym.model.StudentManager#-9223372036854775804</student>
-        </students>
-        <id>ninja.seppli.learngym.model.Course#1</id>
+        <students>ninja.seppli.learngym.model.StudentManager#-9223372036854775808</students>
+        <students>ninja.seppli.learngym.model.StudentManager#-9223372036854775807</students>
+        <students>ninja.seppli.learngym.model.StudentManager#-9223372036854775806</students>
+        <students>ninja.seppli.learngym.model.StudentManager#-9223372036854775805</students>
+        <students>ninja.seppli.learngym.model.StudentManager#-9223372036854775804</students>
         <mainTeacher>ninja.seppli.learngym.model.TeacherManager#-9223372036854775808</mainTeacher>
         <name>5LG18a</name>
     </course>

@@ -22,7 +22,7 @@ public interface Averagable {
 	/**
 	 * Checks if the averagable object has at least one grade. This can be used to
 	 * check if the {@link #getAverage()} will throw a {@link NoGradeYetException}
-	 * 
+	 *
 	 * @return if the object has a grade
 	 */
 	public boolean hasGrades();
