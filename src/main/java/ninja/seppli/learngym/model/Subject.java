@@ -39,6 +39,12 @@ public class Subject implements Averagable {
 	private ObservableList<StudentGradeEntry> studentGradeEntries = FXCollections.observableArrayList();
 
 	/**
+	 * an unmodifiable version from {@link #studentGradeEntries}
+	 */
+	private ObservableList<StudentGradeEntry> finalStudentGradeEntries = FXCollections
+			.unmodifiableObservableList(studentGradeEntries);
+
+	/**
 	 * the teacher
 	 */
 	private ObjectProperty<Teacher> teacher = new SimpleObjectProperty<>();
@@ -180,6 +186,15 @@ public class Subject implements Averagable {
 	 */
 	public ObservableList<Double> getGrades() {
 		return grades;
+	}
+
+	/**
+	 * Returns a list with all student grade entries
+	 *
+	 * @return the list
+	 */
+	public ObservableList<StudentGradeEntry> getStudentGradeEntries() {
+		return finalStudentGradeEntries;
 	}
 
 	/**

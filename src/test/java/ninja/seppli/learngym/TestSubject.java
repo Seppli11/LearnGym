@@ -49,10 +49,10 @@ public class TestSubject {
 
 		StudentManager students = new StudentManager();
 		student1 = students.add("Kim", "Müller");
-		course.getStudents().add(student1);
+		course.addStudent(student1);
 
 		student2 = students.add("Jan", "Haus");
-		course.getStudents().add(student2);
+		course.addStudent(student2);
 	}
 
 	/**

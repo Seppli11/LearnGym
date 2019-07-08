@@ -1,7 +1,6 @@
 package ninja.seppli.learngym;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,7 +51,11 @@ public class LearnGymMain {
 		Student s4 = students.add("Eric", "Lindenbaum");
 		Student s5 = students.add("Tim", "Lindenbaum");
 
-		course.getStudents().addAll(Arrays.asList(s1, s2, s3, s4, s5));
+		course.addStudent(s1);
+		course.addStudent(s2);
+		course.addStudent(s3);
+		course.addStudent(s4);
+		course.addStudent(s5);
 
 		Subject german = new Subject("Deutsch", teacher);
 		Subject french = new Subject("Französisch", teacher);

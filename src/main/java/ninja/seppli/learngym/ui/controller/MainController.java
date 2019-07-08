@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBException;
 
@@ -38,6 +39,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.converter.NumberStringConverter;
 import ninja.seppli.learngym.model.Course;
 import ninja.seppli.learngym.model.Student;
+import ninja.seppli.learngym.model.StudentCourse;
 import ninja.seppli.learngym.model.Subject;
 import ninja.seppli.learngym.saveload.CourseModel;
 import ninja.seppli.learngym.saveload.JaxbLoader;
@@ -71,31 +73,31 @@ public class MainController implements Initializable {
 	 * The average table
 	 */
 	@FXML
-	private TableView<Student> avgTable;
+	private TableView<StudentCourse> avgTable;
 
 	/**
 	 * The average column
 	 */
 	@FXML
-	private TableColumn<Student, Double> avgColumn;
+	private TableColumn<StudentCourse, Double> avgColumn;
 
 	/**
 	 * The negative sum column
 	 */
 	@FXML
-	private TableColumn<Student, Double> sumNegativeColumn;
+	private TableColumn<StudentCourse, Double> sumNegativeColumn;
 
 	/*
 	 * The negative column
 	 */
 	@FXML
-	private TableColumn<Student, Double> negativeCounterColumn;
+	private TableColumn<StudentCourse, Double> negativeCounterColumn;
 
 	/*
 	 * The prom column
 	 */
 	@FXML
-	private TableColumn<Student, String> promColumn;
+	private TableColumn<StudentCourse, String> promColumn;
 
 	/**
 	 * the toolbar
@@ -141,9 +143,9 @@ public class MainController implements Initializable {
 	}
 
 	private void initAvgTable() {
-		avgColumn.setCellValueFactory(param -> {
-			return getCourse().getAveragableOfStudent(param.getValue());
-		});
+//		avgColumn.setCellValueFactory(param -> {
+//			return getCourse().getAveragableOfStudent(param.getValue());
+//		});
 	}
 
 	/**
@@ -186,17 +188,19 @@ public class MainController implements Initializable {
 				reloadCourseModel(getCourseModel());
 			}
 		});
-		course.getStudents().addListener((ListChangeListener<Student>) c -> {
+		course.getStudents().addListener((ListChangeListener<StudentCourse>) c -> {
 			while (c.next()) {
 				if (c.wasAdded()) {
-					mainGrid.getItems().addAll(c.getAddedSubList());
+					mainGrid.getItems().addAll(
+							c.getAddedSubList().stream().map(StudentCourse::getStudent).collect(Collectors.toList()));
 				}
 				if (c.wasRemoved()) {
 					mainGrid.getItems().removeAll(c.getRemoved());
 				}
 			}
 		});
-		mainGrid.getItems().setAll(course.getStudents());
+		mainGrid.getItems()
+				.setAll(course.getStudents().stream().map(StudentCourse::getStudent).collect(Collectors.toList()));
 
 		// setup subject/average grid
 		Iterator<TableColumn<Student, ?>> tableColumnIt = mainGrid.getColumns().iterator();

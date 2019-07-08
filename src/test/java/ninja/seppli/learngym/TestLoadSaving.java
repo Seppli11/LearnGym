@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 
 import javax.xml.bind.JAXBException;
 
@@ -72,7 +71,7 @@ public class TestLoadSaving {
 		assertTrue(teachers.getAll().get(0) == course.getMainTeacher());
 
 		Subject german = course.getSubjects().get(0);
-		Student s1 = course.getStudents().get(0);
+		Student s1 = course.getStudents().get(0).getStudent();
 		assertNotNull(german.getStudentGradeEntry(s1));
 
 	}
@@ -111,7 +110,8 @@ public class TestLoadSaving {
 		Student s1 = students.add("Simona", "Aschwand");
 		Student s2 = students.add("Nicola", "Berscher");
 
-		course.getStudents().addAll(Arrays.asList(s1, s2));
+		course.addStudent(s1);
+		course.addStudent(s2);
 
 		Subject german = new Subject("Deutsch", teacher);
 		course.getSubjects().add(german);

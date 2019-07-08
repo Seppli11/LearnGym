@@ -8,7 +8,7 @@ import java.util.List;
 import ninja.seppli.learngym.exception.NoGradeYetException;
 import ninja.seppli.learngym.model.Averagable;
 import ninja.seppli.learngym.model.Course;
-import ninja.seppli.learngym.model.Student;
+import ninja.seppli.learngym.model.StudentCourse;
 import ninja.seppli.learngym.model.Subject;
 import ninja.seppli.learngym.model.Teacher;
 import ninja.seppli.learngym.view.Printer;
@@ -90,7 +90,7 @@ public class PrintStreamPrinter implements Printer {
 	 */
 	private void printTableContent(Course course) {
 		int i = 1;
-		for (Student student : course.getStudents()) {
+		for (StudentCourse student : course.getStudents()) {
 			printTableLine(i, course, student);
 			i++;
 		}
@@ -101,31 +101,31 @@ public class PrintStreamPrinter implements Printer {
 	 *
 	 * @param nr      the student number
 	 * @param course  the course
-	 * @param student the student of the line
+	 * @param studentCourse the student of the line
 	 */
-	private void printTableLine(int nr, Course course, Student student) {
+	private void printTableLine(int nr, Course course, StudentCourse studentCourse) {
 		StringBuffer formatStr = new StringBuffer("%d\t%s\t");
 		int maxSubjects = course.getSubjects().size();
 		Subject[] subjects = course.getSubjects().stream().toArray(Subject[]::new);
 		Object[] formatArgs = new Object[6 + maxSubjects];
 		Arrays.fill(formatArgs, "");
 		formatArgs[0] = nr;
-		formatArgs[1] = student.getLastname() + " " + student.getFirstname();
+		formatArgs[1] = studentCourse.getStudent().getLastname() + " " + studentCourse.getStudent().getFirstname();
 		for (int i = 0; i < subjects.length; i++) {
 			Subject subject = subjects[i];
-			if (subject.containsStudent(student)) {
+			if (subject.containsStudent(studentCourse.getStudent())) {
 				formatStr.append("\t%.1f");
-				formatArgs[2 + i] = subject.getStudentGradeEntry(student).getGrade();
+				formatArgs[2 + i] = subject.getStudentGradeEntry(studentCourse.getStudent()).getGrade();
 			} else {
 				formatStr.append("\t%s");
 				formatArgs[2 + i] = "-";
 			}
 		}
 		formatStr.append("\t");
-		formatArgs[2 + maxSubjects + 0] = printAverageable(course.getAveragableOfStudent(student), formatStr);
-		formatArgs[2 + maxSubjects + 1] = course.getNegativeGrade(student);
-		formatArgs[2 + maxSubjects + 2] = course.getNegativeGradeCounter(student);
-		formatArgs[2 + maxSubjects + 3] = course.isStudentProv(student) ? "N_PROM" : "DEF_PR";
+		formatArgs[2 + maxSubjects + 0] = printAverageable(studentCourse, formatStr);
+		formatArgs[2 + maxSubjects + 1] = studentCourse.getNegativeSum();
+		formatArgs[2 + maxSubjects + 2] = studentCourse.getNegativeGradeCounter();
+		formatArgs[2 + maxSubjects + 3] = studentCourse.isProv() ? "N_PROM" : "DEF_PR";
 		formatStr.append("\t%.1f\t%d\t%s\n");
 
 		out.printf(formatStr.toString(), formatArgs);
